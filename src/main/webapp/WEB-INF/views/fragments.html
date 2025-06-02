@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Fragments</title>
+</head>
+<body>
+<!-- Header Fragment -->
+<div th:fragment="header">
+    <header class="bg-gray-900 text-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto flex flex-col sm:flex-row items-center justify-between px-6 py-4">
+            <a th:href="@{/user/home}" class="text-3xl font-extrabold flex items-center space-x-2 select-none">
+                <i class="fab fa-apple text-4xl"></i>
+                <span>Apple Store</span>
+            </a>
+
+            <form th:action="@{/user/search}" method="get"
+                  class="mt-4 sm:mt-0 flex w-full max-w-md shadow-lg rounded-lg overflow-hidden"
+                  role="search" aria-label="Tìm kiếm sản phẩm">
+                <input type="text" name="keyword" th:value="${keyword}" placeholder="Tìm kiếm sản phẩm..."
+                       class="flex-grow px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       aria-label="Tìm kiếm sản phẩm" />
+                <button type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 flex items-center justify-center"
+                        aria-label="Tìm kiếm">
+                    <i class="fas fa-search mr-2"></i>
+                </button>
+            </form>
+
+
+            <nav class="mt-4 sm:mt-0 flex space-x-6 text-gray-300 font-semibold">
+                <a th:href="@{/cartController/cartView}" class="flex items-center space-x-2 hover:text-white transition">
+                    <i class="fas fa-shopping-cart text-lg"></i><span>Cart</span>
+                </a>
+                <a th:href="@{/user/logout}" class="flex items-center space-x-2 hover:text-white transition">
+                    <i class="fas fa-sign-out-alt text-lg"></i><span>Log out</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+</div>
+
+
+<!-- FOOTER FRAGMENT -->
+<div th:fragment="footer">
+    <footer style="background-color: #696969; color: white; padding: 40px 20px;">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; max-width: 1200px; margin: auto;">
+
+            <!-- Cửa hàng -->
+            <div style="flex: 1; min-width: 250px; margin-bottom: 20px;">
+                <h3 style="margin-bottom: 15px;">Cửa Hàng Giày</h3>
+                <p>Địa chỉ: 123 Đường Hồ Tùng Mậu,</p>
+                 <p>Quận Nam Từ Liêm, TP. Hà Nội</p>
+                <p>Điện thoại: 0856 123 456</p>
+                <p>Email: Duckhanh@gmail.vn</p>
+            </div>
+
+            <!-- Liên kết -->
+            <div style="flex: 1; min-width: 200px; margin-bottom: 20px;">
+                <h3 style="margin-bottom: 15px;">Liên Kết</h3>
+                <p><a th:href="@{/user/home}" style="color: white; text-decoration: none;">Xem sản phẩm</a></p>
+                <p><a th:href="@{/user/cartView}" style="color: white; text-decoration: none;">Giỏ hàng</a></p>
+                <p><a th:href="@{/logout}" style="color: white; text-decoration: none;">Đăng xuất</a></p>
+            </div>
+
+            <!-- Theo dõi -->
+            <div style="flex: 1; min-width: 200px; margin-bottom: 20px;">
+                <h3 style="margin-bottom: 15px;">Theo Dõi Chúng Tôi</h3>
+                <a href="https://www.facebook.com/apple" style="margin-right: 10px;"><img src="https://img.icons8.com/ios-filled/24/ffffff/facebook--v1.png"/></a>
+                <a href="https://www.instagram.com/apple/" style="margin-right: 10px;"><img src="https://img.icons8.com/ios-filled/24/ffffff/instagram-new.png"/></a>
+                <a href="#" style="margin-right: 10px;"><img src="https://img.icons8.com/ios-filled/24/ffffff/twitter.png"/></a>
+                <a href="#"><img src="https://img.icons8.com/ios-filled/24/ffffff/youtube-play.png"/></a>
+            </div>
+        </div>
+
+        <!-- Dòng bản quyền -->
+        <div style="text-align: center; padding-top: 20px; border-top: 1px solid #ffffff33; margin-top: 30px;">
+            <p>&copy; 2025 Apple Store. Tất cả quyền được bảo lưu.</p>
+        </div>
+    </footer>
+</div>
+
+
+</body>
+</html>

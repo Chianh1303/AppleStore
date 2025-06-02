@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Thông tin đơn hàng</h2>
+<p>Thời gian: <span th:text="${order.orderTime}"></span></p>
+<table>
+    <tr th:each="item : ${order.items}">
+        <td th:text="${item.product.name}"></td>
+        <td th:text="${item.quantity}"></td>
+        <td th:text="${item.product.price} + ' ₫'"></td>
+    </tr>
+</table>
+<p>Tổng tiền: <span th:text="${order.totalAmount} + ' ₫'"></span></p>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title> Chi tiết sản phẩm - Apple Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-tr from-indigo-100 via-purple-100 to-pink-100 min-h-screen flex flex-col">
+<div th:replace="/fragments :: header"></div>
+
+
+<!--<body class="bg-gradient-to-tr from-indigo-100 via-purple-100 to-pink-100 min-h-screen flex flex-col">-->
+<!-- Thông báo thành công nếu có -->
+<main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+<div th:if="${successMessage}" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 text-sm font-medium" id="success-message">
+    <i class="fas fa-check-circle mr-2"></i>
+    <span th:text="${successMessage}">Thao tác thành công!</span>
+</div>
+
+<div class="max-w-5xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-3 gap-8 p-8">
+    <div class="md:col-span-2 flex flex-col justify-center space-y-6">
+        <h1 th:text="${product.name}" class="text-4xl font-extrabold text-gray-900 tracking-tight drop-shadow-md">Tên sản phẩm</h1>
+        <p th:text="${product.description}" class="text-gray-700 text-lg leading-relaxed max-w-xl">Mô tả sản phẩm...</p>
+        <div class="text-4xl font-bold text-emerald-600 drop-shadow-lg" th:text="'$' + ${product.price}">Giá</div>
+        <form th:action="@{/user/add/{id}(id=${product.id})}" method="post" class="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-6">
+            <div class="flex items-center space-x-3">
+                <label for="quantity" class="text-gray-700 font-medium">Quantity</label>
+                <input type="number" id="quantity" name="quantity" min="1" value="1"
+                       class="w-20 px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" required />
+            </div>
+            <button type="submit"
+                    class="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-purple-600 hover:to-indigo-600 text-white font-semibold rounded-2xl shadow-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-400 focus:ring-opacity-50">
+                <i class="fas fa-cart-plus mr-3 text-xl"></i> Thêm vào giỏ
+            </button>
+            <a th:href="@{/user/home}" class="inline-flex items-center justify-center px-8 py-4 border-2 border-gray-300 hover:border-gray-500 text-gray-700 font-semibold rounded-2xl shadow-sm hover:shadow-md transition-colors focus:outline-none focus:ring-4 focus:ring-gray-300">
+                <i class="fas fa-arrow-left mr-3 text-lg"></i> Quay về
+            </a>
+        </form>
+
+    </div>
+    <div class="flex items-center justify-center">
+        <div class="relative w-full max-w-md rounded-3xl overflow-hidden shadow-2xl ring-1 ring-gray-300 bg-white">
+            <img th:src="${product.imageUrl}" alt="Ảnh sản phẩm [[${product.name}]]" class="w-full h-auto object-contain" />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                <p class="text-white text-sm font-medium drop-shadow-md" th:text="${product.name}">Tên sản phẩm</p>
+            </div>
+        </div>
+    </div>
+</div>
+</main>
+<div th:replace="/fragments :: footer"></div>
+
+<script>
+    setTimeout(() => {
+        const msg = document.getElementById('success-message');
+        if (msg) {
+            msg.style.display = 'none';
+        }
+    }, 3000);
+</script>
+
+</body>
+</html>

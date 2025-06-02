@@ -1,0 +1,78 @@
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Giỏ hàng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-gray-50 font-['Roboto'] min-h-screen flex flex-col">
+<div th:replace="/fragments :: header"></div>
+
+
+<main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="overflow-x-auto shadow-lg rounded-lg bg-white">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-blue-600">
+            <tr>
+                <th class="px-4 py-3 text-center">
+                    <input type="checkbox" id="select-all" class="form-checkbox h-4 w-4 text-white" />
+                </th>
+                <th scope="col" class="px-4 py-3 text-left text-sm font-semibold text-white">Hình ảnh</th>
+                <th scope="col" class="px-4 py-3 text-left text-sm font-semibold text-white">Tên sản phẩm</th>
+                <th scope="col" class="px-4 py-3 text-center text-sm font-semibold text-white">Số lượng</th>
+                <th scope="col" class="px-4 py-3 text-right text-sm font-semibold text-white">Giá</th>
+                <th scope="col" class="px-4 py-3 text-right text-sm font-semibold text-white">Thành tiền</th>
+                <th scope="col" class="px-4 py-3 text-center text-sm font-semibold text-white">Hành động</th>
+            </tr>
+            </thead>
+
+            <tbody class="divide-y divide-gray-200">
+            <tr th:each="item : ${cartItems}" class="hover:bg-gray-100 transition-colors duration-200">
+                <td class="px-4 py-3 text-center">
+                    <input type="checkbox" name="selectedItems" th:value="${item.product.id}" class="item-checkbox form-checkbox h-4 w-4 text-blue-600" />
+                </td>
+                <td class="px-4 py-3">
+                    <img th:src="${item.product.imageUrl}" alt="Ảnh sản phẩm: [[${item.product.name}]]" class="w-16 h-16 object-contain rounded-md mx-auto" />
+                </td>
+                <td class="px-4 py-3 text-gray-800 font-medium" th:text="${item.product.name}">Tên sản phẩm</td>
+                <td class="px-4 py-3 text-center text-gray-700" th:text="${item.quantity}">1</td>
+                <td class="px-4 py-3 text-right text-gray-700" th:text="${item.product.price} + ' ₫'">100,000 ₫</td>
+                <td class="px-4 py-3 text-right text-gray-900 font-semibold" th:text="${item.quantity * item.product.price} + ' ₫'">100,000 ₫</td>
+                <td class="px-4 py-3 text-center space-x-2">
+
+                    <a th:href="@{/cartController/remove/{id}(id = ${item.product.id})}" class="inline-flex items-center justify-center px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm font-medium transition">
+                        <i class="fas fa-trash-alt mr-1"></i> Xóa
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+<!--    <div class="mt-6 flex flex-col sm:flex-row sm:justify-between sm:items-center bg-white p-4 rounded-lg shadow-md">-->
+<!--        <div class="text-gray-900 text-lg font-semibold">-->
+<!--            Tổng tiền: <span th:text="${#numbers.formatDecimal(totalAmount, 0, 'COMMA')} + ' ₫'">0$</span>-->
+<!--        </div>-->
+
+        <div class="mt-4 sm:mt-0 space-x-3 flex justify-center sm:justify-start">
+            <a th:href="@{/user/home}" class="inline-flex items-center px-5 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md font-semibold transition">
+                <i class="fas fa-arrow-left mr-2"></i> Quay lại trang chủ
+            </a>
+<!--            <form th:action="@{/cartController/checkoutAll}" method="post">-->
+            <a th:href="@{/user/home}" class="inline-flex items-center justify-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition">
+                <i class="fas fa-credit-card mr-1"></i> Thanh toán
+            </a>
+        </div>
+<!--    </div>-->
+
+</main>
+<div th:if="${successMessage}" class="alert alert-success">
+    <p th:text="${successMessage}"></p>
+</div>
+
+<div th:replace="/fragments :: footer"></div>
+</body>
+</html>

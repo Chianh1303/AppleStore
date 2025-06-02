@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Product Form</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .form-box {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        textarea {
+            height: 100px;
+        }
+
+        .button-group {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            margin-left: 15px;
+            color: #6c757d;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="form-box">
+        <h2 th:text="${product.id == null ? 'Add' : 'Edit'} + ' Product'"></h2>
+        <form th:action="@{/admin/save}" th:object="${product}" method="post">
+            <input type="hidden" th:field="*{id}"/>
+
+            <label>Name:</label>
+            <input type="text" th:field="*{name}" required/>
+
+            <label>Description:</label>
+            <textarea th:field="*{description}"></textarea>
+
+            <label>Price:</label>
+            <input type="number" th:field="*{price}" step="0.01" required/>
+
+            <label>Image URL:</label>
+            <input type="text" th:field="*{imageUrl}"/>
+
+            <div class="button-group">
+                <button type="submit">Save</button>
+                <a th:href="@{/admin/homeAdmin}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
