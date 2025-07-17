@@ -17,17 +17,20 @@ public class Product {
     @Column(name = "is_featured")
     private Boolean isFeatured;
 
-    // Constructors
+    @Column(name = "stock")
+    private Integer stock = 0;
+
     public Product() {
     }
 
-    public Product(Long id, String name, String description, double price, String imageUrl, Boolean isFeatured) {
+    public Product(Long id, String name, String description, double price, String imageUrl, Boolean isFeatured, Integer stock) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.imageUrl = imageUrl;
         this.isFeatured = isFeatured;
+        this.stock = stock;
     }
 
     public Long getId() {
@@ -78,6 +81,14 @@ public class Product {
         isFeatured = featured;
     }
 
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -87,6 +98,7 @@ public class Product {
                 ", price=" + price +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", isFeatured=" + isFeatured +
+                ", stock=" + stock +
                 '}';
     }
 }

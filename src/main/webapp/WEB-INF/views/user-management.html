@@ -32,6 +32,7 @@
             <tr th:each="user : ${users}" class="hover:bg-gray-50">
                 <td class="px-6 py-4" th:text="${user.username}">Tên</td>
                 <td class="px-6 py-4" th:text="${user.email}">Email</td>
+                <td class="px-6 py-4" th:text="${user.password}">Password</td>
                 <td class="px-6 py-4 capitalize" th:text="${user.role}">user</td>
                 <td class="px-6 py-4 text-center space-x-3">
                     <a th:href="@{/admin/user/edit/{id}(id=${user.id})}" class="text-blue-600 hover:underline">Sửa</a>
@@ -43,5 +44,7 @@
         </table>
     </div>
 </main>
+</main>
 </body>
+
 </html>

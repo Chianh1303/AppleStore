@@ -11,4 +11,7 @@ public interface IProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByIsFeaturedTrue();
 
     List<Product> findByIsFeaturedFalse();
+
+
+
 }

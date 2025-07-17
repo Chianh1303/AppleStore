@@ -82,6 +82,7 @@
     </style>
 </head>
 <body>
+<div th:replace="/fragments :: aside"></div>
 <div class="container">
     <div class="form-box">
         <h2 th:text="${product.id == null ? 'Add' : 'Edit'} + ' Product'"></h2>
@@ -107,5 +108,6 @@
         </form>
     </div>
 </div>
+<!--<div th:replace="aside :: footer2"></div>-->
 </body>
 </html>

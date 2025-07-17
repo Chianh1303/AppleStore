@@ -2,11 +2,16 @@ package org.example.applestores.model;
 
 import javax.persistence.*;
 
-
+@Entity
+@Table(name = "cart_item")
 public class CartItem {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
     private Product product;
+    @ManyToOne
     private User user;
 
     private int quantity;
@@ -14,13 +19,16 @@ public class CartItem {
     public CartItem() {
     }
 
-    public CartItem(Product product, int quantity, User user) {
+    public CartItem(Product product, User user, int quantity) {
         this.product = product;
-        this.quantity = quantity;
         this.user = user;
+        this.quantity = quantity;
     }
 
+
     // Getter & Setter
+
+
     public Long getId() {
         return id;
     }
@@ -62,4 +70,6 @@ public class CartItem {
                 ", quantity=" + quantity +
                 '}';
     }
+
+
 }

@@ -29,7 +29,7 @@ public class AdminController {
         return "/admin";
     }
 
-    @GetMapping("/search")
+    @GetMapping("/search_admin")
     public String showProductList(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
         List<Product> products = (keyword != null && !keyword.isEmpty())
                 ? productService.searchByName(keyword)
@@ -42,7 +42,7 @@ public class AdminController {
     @GetMapping("/add")
     public String showAddForm(Model model) {
         model.addAttribute("product", new Product());
-        return "/editPrd";
+        return "/edit-prd";
     }
 
     @PostMapping("/save")
@@ -54,7 +54,7 @@ public class AdminController {
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
         model.addAttribute("product", productService.findById(id));
-        return "/editPrd";
+        return "/edit-prd";
     }
 
     @GetMapping("/delete/{id}")
@@ -67,7 +67,7 @@ public class AdminController {
     public String showProductDetail(@PathVariable Long id, Model model) {
         Product product = productService.findById(id);
         model.addAttribute("product", product);
-        return "/detailAdmin";
+        return "/detail-admin";
     }
 
     @GetMapping("/logout")
@@ -79,18 +79,18 @@ public class AdminController {
     public String viewUserList(Model model) {
         List<User> users = userService.findAll();
         model.addAttribute("users", users);
-        return "/userManagement";
+        return "/user-management";
     }
     @GetMapping("/user/add")
     public String addUserForm(Model model) {
         model.addAttribute("user", new User());
-        return "/addUser";
+        return "/add-User";
     }
 
     @PostMapping("/user/save")
     public String saveNewUser(@ModelAttribute("user") User user) {
         userService.save(user);
-        return "redirect:/admin/userManagement";
+        return "redirect:/admin/user-management";
     }
 
 
@@ -98,19 +98,19 @@ public class AdminController {
     public String editUser(@PathVariable("id") Long id, Model model) {
         User user = userService.findById(id);
         model.addAttribute("user", user);
-        return "/editUser";
+        return "/edit-user";
     }
 
     @PostMapping("/user/update")
     public String updateUser(@ModelAttribute("user") User user) {
         userService.save(user);
-        return "redirect:/admin/userManagement";
+        return "redirect:/admin/user-management";
     }
 
     @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable("id") Long id) {
         userService.deleteUserById(id);
-        return "redirect:/admin/userManagement";
+        return "redirect:/admin/user-management";
     }
 }
 

@@ -4,82 +4,174 @@
     <meta charset="UTF-8"/>
     <title>Fragments</title>
 </head>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+<script src="https://kit.fontawesome.com/YOUR_KIT.js" crossorigin="anonymous"></script>
+
 <body>
 <!-- Header Fragment -->
 <div th:fragment="header">
-    <header class="bg-gray-900 text-white shadow-md sticky top-0 z-50">
-        <div class="container mx-auto flex flex-col sm:flex-row items-center justify-between px-6 py-4">
-            <a th:href="@{/user/home}" class="text-3xl font-extrabold flex items-center space-x-2 select-none">
-                <i class="fab fa-apple text-4xl"></i>
-                <span>Apple Store</span>
+    <header class="bg-[#1a1a1a] text-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto flex items-center justify-between px-6 py-4">
+            <!-- Logo -->
+            <a href="/user/home" class="text-2xl font-bold select-none">
+                 Apple Store
             </a>
 
-            <form th:action="@{/user/search}" method="get"
-                  class="mt-4 sm:mt-0 flex w-full max-w-md shadow-lg rounded-lg overflow-hidden"
-                  role="search" aria-label="Tìm kiếm sản phẩm">
-                <input type="text" name="keyword" th:value="${keyword}" placeholder="Tìm kiếm sản phẩm..."
-                       class="flex-grow px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
-                       aria-label="Tìm kiếm sản phẩm" />
-                <button type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 flex items-center justify-center"
-                        aria-label="Tìm kiếm">
-                    <i class="fas fa-search mr-2"></i>
-                </button>
-            </form>
-
-
-            <nav class="mt-4 sm:mt-0 flex space-x-6 text-gray-300 font-semibold">
-                <a th:href="@{/cartController/cartView}" class="flex items-center space-x-2 hover:text-white transition">
-                    <i class="fas fa-shopping-cart text-lg"></i><span>Cart</span>
-                </a>
-                <a th:href="@{/user/logout}" class="flex items-center space-x-2 hover:text-white transition">
-                    <i class="fas fa-sign-out-alt text-lg"></i><span>Log out</span>
-                </a>
+            <!-- Navigation -->
+            <nav class="hidden md:flex space-x-6 font-semibold text-white">
+                <a href="/user/home">Home page</a>
+                <a th:href="@{/user/introduce}" class="hover:text-blue-500">Introduce</a>
+                <div class="relative group">
+                    <button class="flex items-center space-x-1">
+                        <span>Product</span>
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M5.5 7l4.5 4.5L14.5 7z" />
+                        </svg>
+                    </button>
+                    <!-- Dropdown example -->
+                    <div class="absolute hidden group-hover:block bg-white text-black mt-2 rounded shadow-md w-48">
+                        <a href="/products/category1" class="block px-4 py-2 hover:bg-gray-100">Category 1</a>
+                        <a href="/products/category2" class="block px-4 py-2 hover:bg-gray-100">Category 2</a>
+                    </div>
+                </div>
+                <a href="/promotions">Promotion</a>
+                <a href="/news">News</a>
+                <a href="/contact">Contact</a>
             </nav>
+
+            <!-- Icons -->
+            <div class="flex items-center space-x-4">
+                <!-- Search bar -->
+                <form action="/user/search" method="get" class="hidden md:flex w-64 bg-white rounded overflow-hidden text-black">
+                    <input type="text" name="keyword" placeholder="Product search..." class="px-3 py-2 w-full focus:outline-none" />
+                    <button type="submit" class="px-3 bg-blue-600 text-white hover:bg-white-700">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+
+                <!-- Account -->
+                <a href="/user/profile" class="hover:text-orange-500">
+                    <i class="fas fa-user text-xl"></i>
+                </a>
+
+                <!-- Cart -->
+                <a href="/cartController/cartView" class="relative hover:text-orange-500">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span class="absolute -top-2 -right-2 bg-orange-500 text-xs rounded-full px-1">0</span>
+                </a>
+
+                <!-- Logout -->
+                <a href="/user/logout" class="hover:text-orange-500 hidden md:inline-flex">
+                    <i class="fas fa-sign-out-alt text-xl"></i>
+                </a>
+            </div>
         </div>
     </header>
+
 </div>
 
 
 <!-- FOOTER FRAGMENT -->
 <div th:fragment="footer">
-    <footer style="background-color: #696969; color: white; padding: 40px 20px;">
-        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; max-width: 1200px; margin: auto;">
-
-            <!-- Cửa hàng -->
-            <div style="flex: 1; min-width: 250px; margin-bottom: 20px;">
-                <h3 style="margin-bottom: 15px;">Cửa Hàng Giày</h3>
-                <p>Địa chỉ: 123 Đường Hồ Tùng Mậu,</p>
-                 <p>Quận Nam Từ Liêm, TP. Hà Nội</p>
-                <p>Điện thoại: 0856 123 456</p>
-                <p>Email: Duckhanh@gmail.vn</p>
+    <footer class="bg-[#1a1a1a] text-white py-12 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
+            <!-- Contact Information -->
+            <div>
+                <h2 class="text-lg font-bold mb-4">Contact Information</h2>
+                <p class="font-semibold">NHAN HOA SOFTWARE COMPANY LIMITED</p>
+                <p class="mt-2 flex items-start"><i class="fas fa-map-marker-alt mr-2 mt-1"></i> 4th Floor, 97 - 99 Lang Ha Street, Dong Da District, Hanoi (Petrowaco Building)</p>
+                <p class="mt-2"><i class="fas fa-phone-alt mr-2"></i>0901191616 - 1900 6680</p>
+                <p class="mt-2"><i class="fas fa-envelope mr-2"></i>contact@sm4s.vn</p>
+                <div class="flex space-x-4 mt-4">
+                    <a href="https://www.facebook.com/apple"><i class="fab fa-facebook-f text-2xl hover:text-gray-400"></i></a>
+                    <a href="https://apps.apple.com/us/app/x/id333903271"><i class="fab fa-twitter text-2xl hover:text-gray-400"></i></a>
+                    <a href="https://www.apple.com/vn/store?afid=p240%7Cgo~cmp-20129721283~adg-150705412924~ad-745052141039_kwd-12522920~dev-c~ext-~prd-~mca-~nt-search&cid=aos-vn-kwgo-brand--"><i class="fab fa-google-plus-g text-2xl hover:text-gray-400"></i></a>
+                    <a href="https://www.instagram.com/apple/"><i class="fab fa-instagram text-2xl hover:text-gray-400"></i></a>
+                    <a href="#"><i class="fab fa-youtube text-2xl hover:text-gray-400"></i></a>
+                </div>
             </div>
 
-            <!-- Liên kết -->
-            <div style="flex: 1; min-width: 200px; margin-bottom: 20px;">
-                <h3 style="margin-bottom: 15px;">Liên Kết</h3>
-                <p><a th:href="@{/user/home}" style="color: white; text-decoration: none;">Xem sản phẩm</a></p>
-                <p><a th:href="@{/user/cartView}" style="color: white; text-decoration: none;">Giỏ hàng</a></p>
-                <p><a th:href="@{/logout}" style="color: white; text-decoration: none;">Đăng xuất</a></p>
+            <!-- Policies -->
+            <div>
+                <h2 class="text-lg font-bold mb-4">Policies</h2>
+                <ul class="space-y-2 text-sm text-gray-300">
+                    <li><a href="#" class="hover:text-white">→ Terms of Service</a></li>
+                    <li><a href="#" class="hover:text-white">→ Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-white">→ Shipping Policy</a></li>
+                    <li><a href="#" class="hover:text-white">→ Return Policy</a></li>
+                    <li><a href="#" class="hover:text-white">→ Purchase Policy</a></li>
+                </ul>
             </div>
 
-            <!-- Theo dõi -->
-            <div style="flex: 1; min-width: 200px; margin-bottom: 20px;">
-                <h3 style="margin-bottom: 15px;">Theo Dõi Chúng Tôi</h3>
-                <a href="https://www.facebook.com/apple" style="margin-right: 10px;"><img src="https://img.icons8.com/ios-filled/24/ffffff/facebook--v1.png"/></a>
-                <a href="https://www.instagram.com/apple/" style="margin-right: 10px;"><img src="https://img.icons8.com/ios-filled/24/ffffff/instagram-new.png"/></a>
-                <a href="#" style="margin-right: 10px;"><img src="https://img.icons8.com/ios-filled/24/ffffff/twitter.png"/></a>
-                <a href="#"><img src="https://img.icons8.com/ios-filled/24/ffffff/youtube-play.png"/></a>
+            <!-- Links -->
+            <div>
+                <h2 class="text-lg font-bold mb-4">Links</h2>
+                <ul class="space-y-2 text-sm text-gray-300">
+                    <li><a href="#" class="hover:text-white">→ About Us</a></li>
+                    <li><a href="#" class="hover:text-white">→ Latest News</a></li>
+                    <li><a href="#" class="hover:text-white">→ Essential Information</a></li>
+                    <li><a href="#" class="hover:text-white">→ FAQs</a></li>
+                    <li><a href="#" class="hover:text-white">→ Online Support</a></li>
+                </ul>
+            </div>
+
+            <!-- Products -->
+            <div>
+                <h2 class="text-lg font-bold mb-4">Products</h2>
+                <ul class="space-y-2 text-sm text-gray-300">
+                    <li><a href="#" class="hover:text-white">→ Mobile Phones</a></li>
+                    <li><a href="#" class="hover:text-white">→ Desktop Computers</a></li>
+                    <li><a href="#" class="hover:text-white">→ Laptops</a></li>
+                    <li><a href="#" class="hover:text-white">→ Keyboards</a></li>
+                    <li><a href="#" class="hover:text-white">→ Mice</a></li>
+                </ul>
             </div>
         </div>
 
-        <!-- Dòng bản quyền -->
-        <div style="text-align: center; padding-top: 20px; border-top: 1px solid #ffffff33; margin-top: 30px;">
-            <p>&copy; 2025 Apple Store. Tất cả quyền được bảo lưu.</p>
+
+    <!-- Copyright -->
+        <div class="border-t border-gray-600 mt-12 pt-4 text-center text-sm text-gray-400">
+            &copy; 2025 Apple Store. All rights reserved.
         </div>
     </footer>
+
 </div>
 
+<aside th:fragment="aside" class="bg-white shadow-md w-64 flex flex-col">
+    <div class="flex flex-1 w-full min-h-screen">
+        <!-- Sidebar -->
+        <aside class="bg-white shadow-md w-64 flex flex-col">
+            <div class="px-6 py-8 border-b border-gray-200 flex-shrink-0">
+                <h2 class="text-3xl font-semibold text-gray-800">Product List</h2>
+            </div>
+            <nav class="flex-grow px-6 py-4 flex flex-col justify-between">
+                <ul class="flex flex-col space-y-4 text-gray-700 font-semibold">
+                    <li>
+                        <a href="#" th:href="@{/admin/homeAdmin}" class="flex items-center space-x-3 p-3 rounded-md hover:bg-blue-100 hover:text-blue-600 transition">
+                            <i class="fas fa-box-open text-lg"></i>
+                            <span>Quản lý sản phẩm</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" th:href="@{/admin/userManagement}" class="flex items-center space-x-3 p-3 rounded-md hover:bg-yellow-100 hover:text-yellow-600 transition">
+                            <i class="fas fa-users text-lg"></i>
+                            <span>Quản lý người dùng</span>
+                        </a>
+                    </li>
+                </ul>
+
+            </nav> <div class="pt-4">
+            <a href="#" th:href="@{/admin/logout}" class="flex items-center space-x-3 p-3 rounded-md text-red-600 hover:bg-red-100 hover:text-red-800 transition font-semibold">
+                <i class="fas fa-sign-out-alt text-lg"></i>
+                <span>Đăng xuất</span>
+            </a>
+        </div>
+        </aside>
+        </div>
+        </aside>
 
 </body>
+
 </html>
