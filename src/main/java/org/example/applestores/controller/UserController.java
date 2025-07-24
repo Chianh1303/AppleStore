@@ -67,15 +67,17 @@ public class UserController {
 
     @PostMapping("/add/{id}")
     public String addToCart(@PathVariable Long id,
-                            @RequestParam(name = "quantity",defaultValue = "1") int quantity,
+                            @RequestParam(name = "quantity", defaultValue = "1") int quantity,
                             HttpSession session,
                             RedirectAttributes redirectAttributes) {
 
         Product product = (Product) productService.findById(id);
-        String x = cartItemService.addToCart(product, quantity, session, redirectAttributes);
-        if (x != null) return x;
-        return "redirect:/user/home";
+        String result = cartItemService.addToCart(product, quantity, session, redirectAttributes);
+
+        if (result != null) return result; // Nếu có lỗi về tồn kho sẽ redirect về trang trước
+        return "redirect:/user/home"; // Thành công thì về trang chính
     }
+
 
 
 

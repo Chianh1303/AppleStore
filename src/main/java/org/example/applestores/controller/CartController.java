@@ -2,12 +2,10 @@ package org.example.applestores.controller;
 
 import org.example.applestores.model.*;
 
-import org.example.applestores.repository.ICartItemRepository;
 import org.example.applestores.repository.IOrderRepository;
 import org.example.applestores.repository.IProductRepository;
 import org.example.applestores.service.cart.CartItemService;
-import org.example.applestores.service.cart.ICartItemService;
-import org.example.applestores.service.order.IOrderService;
+ import org.example.applestores.service.order.IOrderService;
 import org.example.applestores.service.product.ProductService;
 import org.example.applestores.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,6 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -39,15 +36,13 @@ public class CartController {
     private ProductService productService;
     @Autowired
     private IOrderService orderService;
-    @Autowired
-    private ICartItemRepository cartItemRepository;
 
     @GetMapping("/cartView")
     public String viewCart(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         List<CartItem> cartItems = cartItemService.findCartByUser(session, model);
 
         if (cartItems == null || cartItems.isEmpty()) {
-            redirectAttributes.addFlashAttribute("successMessage", "Giỏ hàng rỗng !");
+            redirectAttributes.addFlashAttribute("successMessage", "Cart is empty!");
             return "redirect:/user/home";
         }
 
@@ -62,6 +57,8 @@ public class CartController {
                 .mapToLong(item -> (long) (item.getQuantity() * item.getProduct().getPrice()))
                 .sum();
 
+        int cartItemCount = cartItems.stream().mapToInt(CartItem::getQuantity).sum();
+        model.addAttribute("cartItemCount", cartItemCount);
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("totalAmount", totalAmount);
 
@@ -69,78 +66,76 @@ public class CartController {
     }
 
 
-    @GetMapping("/remove/{id}")
+    @PostMapping("/remove/{id}")
     public String remove(@PathVariable Long id, HttpSession session, Model model) {
         cartItemService.removeById(id, session, model);
         return "redirect:/cartController/cartView";
     }
-
-    @PostMapping("/checkoutAll")
-    public String checkoutAll(HttpSession session, RedirectAttributes redirectAttributes) {
-        cartItemService.checkoutAllFromSession(session);
-        redirectAttributes.addFlashAttribute("successMessage", "Thanh toán thành công!");
-        return "redirect:/orders/list";
-    }
-
-    @PostMapping("/cart/checkout")
-    public String checkout(@RequestParam(name = "selectedItems", required = false) List<Long> selectedProductIds,
-                           Principal principal,
-                           RedirectAttributes redirectAttributes) {
-        if (selectedProductIds == null || selectedProductIds.isEmpty()) {
-            redirectAttributes.addFlashAttribute("successMessage", "Bạn chưa chọn sản phẩm để đặt hàng.");
-            return "redirect:/cart";
-        }
-
-        User user = userService.findByEmail(principal.getName()); // hoặc lấy từ session
-        List<CartItem> cartItems = cartItemRepository.findByUser(user);
-
-        List<CartItem> selectedItems = cartItems.stream()
-                .filter(item -> selectedProductIds.contains(item.getProduct().getId()))
-                .collect(Collectors.toList());
-
-        if (selectedItems.isEmpty()) {
-            redirectAttributes.addFlashAttribute("successMessage", "Không có sản phẩm nào được chọn.");
-            return "redirect:/cart";
-        }
-
-        Order order = new Order();
-        order.setUser(user);
-        order.setCustomerName(user.getUsername()); // hoặc để người dùng nhập ở form
-        order.setOrderDate(LocalDateTime.now());
-
-        List<OrderItem> orderItems = new ArrayList<>();
-        for (CartItem cartItem : selectedItems) {
-            Product product = cartItem.getProduct();
-            if (product.getStock() < cartItem.getQuantity()) {
-                redirectAttributes.addFlashAttribute("successMessage", "Sản phẩm " + product.getName() + " không đủ hàng.");
-                return "redirect:/cart";
-            }
-
-            OrderItem orderItem = new OrderItem();
-            orderItem.setProduct(product);
-            orderItem.setQuantity(cartItem.getQuantity());
-            orderItem.setPrice(((Product) product).getPrice() * cartItem.getQuantity());
-            orderItem.setOrder(order);
-
-            orderItems.add(orderItem);
-
-            // Cập nhật tồn kho
-            product.setStock(product.getStock() - cartItem.getQuantity());
-            productService.save(product);
-        }
-
-        order.setItems(orderItems);
-        orderService.save(order);
-
-        // Xoá sản phẩm đã đặt khỏi giỏ hàng
-        for (CartItem item : selectedItems) {
-            cartItemRepository.deleteByUserAndProductId(user, item.getProduct().getId());
-        }
-
-        redirectAttributes.addFlashAttribute("successMessage", "Đặt hàng thành công!");
-        return "redirect:/cart";
-    }
 }
+
+
+//    @PostMapping("/cart/checkout")
+//    public String checkout(@RequestParam(name = "selectedItems", required = false) List<Long> selectedProductIds,
+//                           Principal principal,
+//                           RedirectAttributes redirectAttributes) {
+//        if (selectedProductIds == null || selectedProductIds.isEmpty()) {
+//            redirectAttributes.addFlashAttribute("successMessage", "Bạn chưa chọn sản phẩm để đặt hàng.");
+//            return "redirect:/cartController/cartView";
+//        }
+//
+//        User user = userService.findByEmail(principal.getName()); // hoặc lấy từ session
+//        List<CartItem> cartItems = cartItemRepository.findByUser(user);
+//
+//        List<CartItem> selectedItems = cartItems.stream()
+//                .filter(item -> selectedProductIds.contains(item.getProduct().getId()))
+//                .collect(Collectors.toList());
+//
+//        if (selectedItems.isEmpty()) {
+//            redirectAttributes.addFlashAttribute("successMessage", "Không có sản phẩm nào được chọn.");
+//            return "redirect:/cartController/cartView";
+//        }
+//
+//        Order order = new Order();
+//        order.setUser(user);
+//        order.setCustomerName(user.getUsername()); // hoặc để người dùng nhập ở form
+//        order.setOrderDate(LocalDateTime.now());
+//
+//        List<OrderItem> orderItems = new ArrayList<>();
+//        double total = 0;
+//        for (CartItem cartItem : selectedItems) {
+//            Product product = cartItem.getProduct();
+//            total += product.getPrice() * cartItem.getQuantity();
+//            if (product.getStock() < cartItem.getQuantity()) {
+//                redirectAttributes.addFlashAttribute("successMessage", "Sản phẩm " + product.getName() + " không đủ hàng.");
+//                return "redirect:/cartController/cartView";
+//            }
+//
+//            OrderItem orderItem = new OrderItem();
+//            orderItem.setProduct(product);
+//            orderItem.setQuantity(cartItem.getQuantity());
+//            orderItem.setPrice(((Product) product).getPrice() * cartItem.getQuantity());
+//            orderItem.setOrder(order);
+//
+//            orderItems.add(orderItem);
+//
+//            // Cập nhật tồn kho
+//            product.setStock(product.getStock() - cartItem.getQuantity());
+//            productService.save(product);
+//        }
+//
+//        order.setItems(orderItems);
+////        order.setTotalAmount(total);
+//        orderService.save(order);
+//
+//        // Xoá sản phẩm đã đặt khỏi giỏ hàng
+//        for (CartItem item : selectedItems) {
+//            cartItemRepository.deleteByUserAndProductId(user, item.getProduct().getId());
+//        }
+//
+//        redirectAttributes.addFlashAttribute("successMessage", "Order successful!");
+//        return "redirect:/cartController/cartView";
+//    }
+//}
 //    @PostMapping("/checkout")
 //    public String checkout(HttpSession session, RedirectAttributes redirectAttributes) {
 //        Map<Long, CartItem> cart = (Map<Long, CartItem>) session.getAttribute("cart");

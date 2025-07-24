@@ -2,16 +2,11 @@ package org.example.applestores.model;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "cart_item")
 public class CartItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
 
-    @ManyToOne
     private Product product;
-    @ManyToOne
     private User user;
 
     private int quantity;

@@ -1,113 +1,58 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head>
-    <title>Product Form</title>
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-        }
-
-        .container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-        }
-
-        .form-box {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 500px;
-        }
-
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-top: 12px;
-            font-weight: bold;
-        }
-
-        input[type="text"],
-        input[type="number"],
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            resize: vertical;
-        }
-
-        textarea {
-            height: 100px;
-        }
-
-        .button-group {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        a {
-            margin-left: 15px;
-            color: #6c757d;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <title>Form Sản phẩm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
 </head>
-<body>
+<body class="bg-gray-100 min-h-screen font-sans">
+
+<!-- Sidebar -->
 <div th:replace="/fragments :: aside"></div>
-<div class="container">
-    <div class="form-box">
-        <h2 th:text="${product.id == null ? 'Add' : 'Edit'} + ' Product'"></h2>
-        <form th:action="@{/admin/save}" th:object="${product}" method="post">
-            <input type="hidden" th:field="*{id}"/>
 
-            <label>Name:</label>
-            <input type="text" th:field="*{name}" required/>
+<!-- Nội dung chính -->
+<div class="pl-64 p-8">
+    <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow">
+        <h2 class="text-3xl font-semibold text-gray-800 mb-6" th:text="${product.id == null ? 'Thêm sản phẩm' : 'Chỉnh sửa sản phẩm'}"></h2>
 
-            <label>Description:</label>
-            <textarea th:field="*{description}"></textarea>
+        <form th:action="@{/admin/save}" th:object="${product}" method="post" class="space-y-6">
+            <input type="hidden" th:field="*{id}" />
 
-            <label>Price:</label>
-            <input type="number" th:field="*{price}" step="0.01" required/>
+            <div>
+                <label class="block font-medium text-gray-700 mb-1">Tên sản phẩm:</label>
+                <input type="text" th:field="*{name}" placeholder="Nhập tên sản phẩm"
+                       required class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"/>
+            </div>
 
-            <label>Image URL:</label>
-            <input type="text" th:field="*{imageUrl}"/>
+            <div>
+                <label class="block font-medium text-gray-700 mb-1">Mô tả:</label>
+                <textarea th:field="*{description}" rows="4" placeholder="Nhập mô tả"
+                          class="w-full border border-gray-300 rounded px-4 py-2 resize-y focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+            </div>
 
-            <div class="button-group">
-                <button type="submit">Save</button>
-                <a th:href="@{/admin/homeAdmin}">Cancel</a>
+            <div>
+                <label class="block font-medium text-gray-700 mb-1">Giá:</label>
+                <input type="number" th:field="*{price}" placeholder="Nhập giá"
+                       min="0" step="0.01" required class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"/>
+            </div>
+
+            <div>
+                <label class="block font-medium text-gray-700 mb-1">URL hình ảnh:</label>
+                <input type="text" th:field="*{imageUrl}" placeholder="Nhập URL hình ảnh"
+                       class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"/>
+            </div>
+
+            <div class="flex justify-between mt-6">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-semibold">
+                    <i class="fas fa-save mr-2"></i>Lưu
+                </button>
+                <a th:href="@{/admin/homeAdmin}" class="text-gray-600 hover:underline font-medium">Hủy</a>
             </div>
         </form>
     </div>
 </div>
-<!--<div th:replace="aside :: footer2"></div>-->
+
 </body>
 </html>

@@ -5,15 +5,15 @@ import org.example.applestores.model.CartItem;
 import org.example.applestores.model.Order;
 import org.example.applestores.model.OrderItem;
 import org.example.applestores.model.User;
-import org.example.applestores.repository.ICartItemRepository;
 import org.example.applestores.repository.IOrderRepository;
 import org.example.applestores.service.cart.ICartItemService;
 import org.example.applestores.service.order.IOrderService;
+import org.example.applestores.service.order.OrderService;
 import org.example.applestores.service.product.IProductService;
 import org.example.applestores.service.user.IUserService;
 
 
-
+import org.example.applestores.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,14 +31,12 @@ import java.util.stream.Collectors;
 public class OrderController {
     @Autowired
     private ICartItemService cartItemService;
+
     @Autowired
-    private IUserService userService;
+    private OrderService orderService;
+
     @Autowired
-    private IOrderService orderService;
-    @Autowired
-    private ICartItemRepository cartItemRepository;
-    @Autowired
-    private IProductService productService;
+    private UserService userService;
 
     @GetMapping("/list")
     public String listOrders(Model model, HttpSession session) {
@@ -116,9 +114,37 @@ public class OrderController {
         }
 
 
-        redirectAttributes.addFlashAttribute("successMessage", "Đặt hàng thành công!");
+        redirectAttributes.addFlashAttribute("successMessage", "Order successful!");
         return "redirect:/user/home";
+    }
+    // Xem lịch sử đơn hàng
+    @GetMapping("/history")
+    public String showOrderHistory(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("loggedInUser");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        List<Order> orders = orderService.findByUser(user);
+        model.addAttribute("orders", orders);
+        return "/order-history";
     }
 
 
+    @GetMapping("/detail/{id}")
+    public String viewOrderDetail(@PathVariable("id") Long id, HttpSession session, Model model) {
+        User user = (User) session.getAttribute("loggedInUser");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        Order order = orderService.findById(id);
+        if (order == null || !order.getUser().getId().equals(user.getId())) {
+            return "redirect:/orders/history";
+        }
+
+        model.addAttribute("order", order);
+        return "/order-detail";
+    }
 }
+

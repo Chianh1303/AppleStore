@@ -19,13 +19,21 @@ public class Order {
     private User user;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items = new ArrayList<>();
+    private double totalAmount;
 
     // Getters and setters
 
     public Order() {
     }
 
-
+    public Order(Long id, LocalDateTime createdAt, String customerName, User user, List<OrderItem> items, double totalAmount) {
+        this.id = id;
+        this.createdAt = createdAt;
+        this.customerName = customerName;
+        this.user = user;
+        this.items = items;
+        this.totalAmount = totalAmount;
+    }
 
     public Order(Long id, LocalDateTime createdAt, String customerName, User user, List<OrderItem> items) {
         this.id = id;
@@ -80,7 +88,14 @@ public class Order {
     }
 
     public void setTotalAmount(double sum) {
-        this.items.forEach(item -> item.setPrice(item.getProduct().getPrice() * item.getQuantity()));
+//        this.items.forEach(item -> item.setPrice(item.getProduct().getPrice() *
+        this.totalAmount = sum;
+    }
+
+
+
+    public double getTotalAmount() {
+        return totalAmount;
     }
 }
 

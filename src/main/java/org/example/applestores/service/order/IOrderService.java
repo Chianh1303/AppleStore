@@ -1,6 +1,7 @@
 package org.example.applestores.service.order;
 
 import org.example.applestores.model.CartItem;
+import org.example.applestores.model.Order;
 import org.example.applestores.model.User;
 import org.springframework.stereotype.Service;
 
@@ -12,5 +13,6 @@ public interface IOrderService<T> {
     List<T> findAll();
     T findById(Long id);
 
+    List<Order> findByUser(User user);
 }
 

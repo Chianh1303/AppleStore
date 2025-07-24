@@ -2,38 +2,46 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AppleStore - Sign In</title>
+    <title>AppleStore - Register</title>
     <style>
         body {
             margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: url('https://cdn.tgdd.vn/hoi-dap/1398821/su-dung-iphone-nen-mua-laptop-hang-nao-thi-tot-tien-va-phu-1-800x450.jpg') no-repeat center center fixed;
             background-size: cover;
             backdrop-filter: blur(4px);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            opacity: 0; /* Bắt đầu với opacity 0 để chuyển dần */
+            transition: opacity 0.5s ease-in-out;
         }
 
+        body.fade-in {
+            opacity: 1;
+        }
 
         .login-box {
-            /*background-color: white;*/
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             padding: 40px 30px;
             width: 360px;
             text-align: center;
+            background-color: rgba(255, 255, 255, 0.95);
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
+
         .login-box img {
             width: 50px;
             margin-bottom: 20px;
         }
+
         h2 {
             font-size: 24px;
             color: #1d1d1f;
             margin-bottom: 20px;
         }
+
         input[type="text"], input[type="password"], input[type="email"] {
             width: 94%;
             padding: 12px;
@@ -43,10 +51,11 @@
             font-size: 16px;
             background-color: #f9f9f9;
         }
+
         button {
             width: 102%;
             padding: 12px;
-            background-color: #0071e3;
+            background-color: #ff6f00;
             color: white;
             border: none;
             border-radius: 8px;
@@ -54,35 +63,128 @@
             cursor: pointer;
             font-weight: bold;
         }
+
         button:hover {
-            background-color: #005ecb;
+            background-color: #e65c00;
         }
-        .error {
-            color: red;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
+
         .footer {
             margin-top: 20px;
             font-size: 13px;
             color: #6e6e73;
         }
+
+        .animate-fade-in-down {
+            animation: fadeInDown 0.5s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .error-box {
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .error-box div {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #fff3e0;
+            border: 1px solid #ffb74d;
+            color: #e65100;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        /* Spinner styles */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            border: 6px solid #eee;
+            border-top: 6px solid #ff6f00;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
     </style>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
+<div class="overlay" id="loadingOverlay" style="display: none;">
+    <div class="spinner"></div>
+</div>
+
 <div class="login-box">
     <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Logo">
     <h2>Register account with AppleStore</h2>
+
+    <!-- Error notification -->
+    <div th:if="${error}" class="error-box animate-fade-in-down">
+        <div>
+            <i class="fas fa-exclamation-circle"></i>
+            <span th:text="${error}">Something went wrong</span>
+        </div>
+    </div>
+
     <form th:action="@{/login/register}" method="post" th:object="${user}">
         <input type="text" th:field="*{username}" placeholder="Apple ID or Username" required>
         <input type="email" th:field="*{email}" placeholder="Email" required>
         <input type="password" th:field="*{password}" placeholder="Password" required>
-        <div class="error" th:if="${error}" th:text="${error}"></div>
         <button type="submit">Continue</button>
     </form>
+
     <div class="footer">
-        <p>if you already have an account. <a href="/login">Sign in now.</a></p>
+        <p>If you already have an account, <a href="/login">sign in now.</a></p>
     </div>
 </div>
+
+<!-- JS xử lý fade + spinner -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.body.classList.add("fade-in");
+    });
+
+    const form = document.querySelector("form");
+    const overlay = document.getElementById("loadingOverlay");
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        document.body.classList.remove("fade-in"); // Fade out
+        document.body.style.opacity = "0";
+        overlay.style.display = "flex";
+        setTimeout(() => {
+            this.submit();
+        }, 300); // Delay để hiệu ứng chạy
+    });
+</script>
 </body>
 </html>

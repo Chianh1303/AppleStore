@@ -1,87 +1,260 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>AppleStore - Sign In</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      background: url('https://cdn.tgdd.vn/hoi-dap/1398821/su-dung-iphone-nen-mua-laptop-hang-nao-thi-tot-tien-va-phu-1-800x450.jpg') no-repeat center center fixed;
-      background-size: cover;
-      backdrop-filter: blur(4px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+    <meta charset="UTF-8"/>
+    <title>AppleStore - Sign In</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: url('https://images.unsplash.com/photo-1603292557409-c58a9f973efb?auto=format&fit=crop&w=1740&q=80') no-repeat center center fixed;
+            background-size: cover;
+            backdrop-filter: blur(6px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-box {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            padding: 40px 30px;
+            width: 360px;
+            text-align: center;
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-box img {
+            width: 50px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 94%;
+            padding: 12px;
+            margin: 8px 0 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: #f9f9f9;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            gap: 6px;
+            font-size: 14px;
+            margin: -8px 0 16px;
+        }
+
+        button {
+            width: 102%;
+            padding: 12px;
+            background-color: #ff6b00;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #e65c00;
+        }
+
+        .error {
+            color: red;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #6e6e73;
+        }
+
+        .google-btn {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            color: #444;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        .google-btn:hover {
+            background-color: #f3f3f3;
+        }
+
+        .google-btn img {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+    <style>
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: scale(0.98);
+            }
+        }
+
+        .fade-out {
+            animation: fadeOut 0.5s ease forwards;
+        }
+
+        .animate-fade-in-down {
+            animation: fadeInDown 0.5s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            display: none;
+        }
+
+        .spinner {
+            border: 6px solid #eee;
+            border-top: 6px solid #ff6f00;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .error-box {
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .error-box div {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #fff3e0;
+            border: 1px solid #ffb74d;
+            color: #e65100;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
 
 
-    .login-box {
-      /*background-color: white;*/
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      padding: 40px 30px;
-      width: 360px;
-      text-align: center;
-    }
-    .login-box img {
-      width: 50px;
-      margin-bottom: 20px;
-    }
-    h2 {
-      font-size: 24px;
-      color: #1d1d1f;
-      margin-bottom: 20px;
-    }
-    input[type="text"], input[type="password"] {
-      width: 94%;
-      padding: 12px;
-      margin: 8px 0 16px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-      background-color: #f9f9f9;
-    }
-    button {
-      width: 102%;
-      padding: 12px;
-      background-color: #0071e3;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    button:hover {
-      background-color: #005ecb;
-    }
-    .error {
-      color: red;
-      margin-bottom: 15px;
-      font-size: 14px;
-    }
-    .footer {
-      margin-top: 20px;
-      font-size: 13px;
-      color: #6e6e73;
-    }
-  </style>
+    </style>
+
 </head>
 <body>
 <div class="login-box">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Logo">
-  <h2>Sign in to AppleStore</h2>
-  <form th:action="@{/login/signin}" method="post" th:object="${user}">
-    <input type="text" th:field="*{username}" placeholder="Apple ID or Username" required>
-    <input type="password" th:field="*{password}" placeholder="Password" required>
-    <div class="error" th:if="${error}" th:text="${error}"></div>
-    <button type="submit">Continue</button>
-  </form>
-  <div class="footer">
-    <p>Don’t have an Apple ID? <a href="/login/register">Create yours now.</a></p>
-  </div>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Logo">
+    <h2>Sign in to AppleStore</h2>
+    <!-- Error notification -->
+    <div th:if="${error}" class="error-box animate-fade-in-down">
+        <div>
+            <i class="fas fa-exclamation-circle"></i>
+            <span th:text="${error}">Incorrect username or password</span>
+        </div>
+    </div>
+    <form th:action="@{/login/signin}" method="post" th:object="${user}">
+        <input type="text" th:field="*{username}" name="username" placeholder="Apple ID or Username" required>
+        <input type="password" th:field="*{password}" placeholder="Password" required>
+
+        <div class="remember-me">
+            <input type="checkbox" id="remember-me" name="remember-me"/>
+            <label for="remember-me">Remember me</label>
+        </div>
+
+
+
+
+        <button type="submit">Continue</button>
+    </form>
+
+
+    <div class="footer">
+        <p>Don’t have an Apple ID? <a href="/login/register">Create yours now.</a></p>
+    </div>
 </div>
+<div class="overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+</div>
+
+
+<!-- Remember me logic -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const usernameInput = document.querySelector('input[name="username"]');
+        const rememberCheckbox = document.querySelector('input[name="remember-me"]');
+
+        // Auto-fill username if remembered
+        if (localStorage.getItem("rememberedUsername")) {
+            usernameInput.value = localStorage.getItem("rememberedUsername");
+            rememberCheckbox.checked = true;
+        }
+
+        // Save or clear username on submit
+        document.querySelector("form").addEventListener("submit", () => {
+            if (rememberCheckbox.checked) {
+                localStorage.setItem("rememberedUsername", usernameInput.value);
+            } else {
+                localStorage.removeItem("rememberedUsername");
+            }
+        });
+    });
+
+    document.querySelector("form").addEventListener("submit", function () {
+        document.getElementById("loadingOverlay").style.display = "flex";
+    });
+
+</script>
 </body>
 </html>

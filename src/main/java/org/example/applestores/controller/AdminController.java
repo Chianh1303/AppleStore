@@ -90,7 +90,7 @@ public class AdminController {
     @PostMapping("/user/save")
     public String saveNewUser(@ModelAttribute("user") User user) {
         userService.save(user);
-        return "redirect:/admin/user-management";
+        return "redirect:/admin/userManagement";
     }
 
 
@@ -103,14 +103,17 @@ public class AdminController {
 
     @PostMapping("/user/update")
     public String updateUser(@ModelAttribute("user") User user) {
+        if(user.getPassword().isEmpty()) {
+            user.setPassword(userService.findById(user.getId()).getPassword());
+        }
         userService.save(user);
-        return "redirect:/admin/user-management";
+        return "redirect:/admin/userManagement";
     }
 
     @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable("id") Long id) {
         userService.deleteUserById(id);
-        return "redirect:/admin/user-management";
+        return "redirect:/admin/userManagement";
     }
 }
 

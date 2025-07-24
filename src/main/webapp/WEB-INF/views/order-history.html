@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Lịch sử đơn hàng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+<div th:replace="/fragments :: header"></div>
+
+<main class="container mx-auto py-12 px-4">
+    <h1 class="text-3xl font-bold text-gray-800 mb-8">Lịch sử đơn hàng</h1>
+
+    <div class="overflow-x-auto shadow rounded-lg bg-white">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-orange-500 text-white">
+            <tr>
+                <th class="px-6 py-3 text-left">Mã đơn</th>
+                <th class="px-6 py-3 text-left">Ngày đặt</th>
+                <th class="px-6 py-3 text-left">Tên khách hàng</th>
+<!--                <th class="px-6 py-3 text-right">Số lượng sản phẩm</th>-->
+                <th class="px-6 py-3 text-right">Tổng tiền</th>
+                <th class="px-6 py-3 text-center">Chi tiết</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 text-gray-700 text-sm" th:if="${orders != null}">
+            <tr th:each="order,stat : ${orders}">
+                <td class="px-6 py-4" th:text="${stat.count}">1</td>
+                <td class="px-6 py-4" th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}">22/07/2025</td>
+                <td class="px-6 py-4" th:text="${order.customerName}">Nguyễn Văn A</td>
+<!--                <td class="px-6 py-4 text-right" th:text="${#lists.size(order.items)}">3</td>-->
+                <td class="px-6 py-4 text-right text-blue-600 font-medium">
+                    <span th:text="${order.getTotalAmount()} + ' $'">100 $</span>
+                </td>
+
+                <td class="px-6 py-4 text-center">
+                    <a th:href="@{/orders/detail/{id}(id=${order.id})}"
+                       class="text-orange-600 hover:underline font-medium">Xem</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+</body>
+</html>
