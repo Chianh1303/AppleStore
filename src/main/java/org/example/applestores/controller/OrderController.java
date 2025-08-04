@@ -117,7 +117,6 @@ public class OrderController {
         redirectAttributes.addFlashAttribute("successMessage", "Order successful!");
         return "redirect:/user/home";
     }
-    // Xem lịch sử đơn hàng
     @GetMapping("/history")
     public String showOrderHistory(HttpSession session, Model model) {
         User user = (User) session.getAttribute("loggedInUser");

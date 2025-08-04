@@ -24,24 +24,23 @@
             <nav class="hidden md:flex space-x-6  font-semibold text-white">
                 <a href="/user/home" class="hover:text-orange-500">Home page</a>
                 <a th:href="@{/user/introduce}" class="hover:text-orange-500">Introduce</a>
-                <div class="relative group">
-                    <button class="flex items-center space-x-1">
-                        <span>Product</span>
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M5.5 7l4.5 4.5L14.5 7z" />
-                        </svg>
-                    </button>
-                        <!-- Dropdown example -->
-                        <div class="absolute hidden group-hover:block hover:text-orange-500  bg-white text-black mt-2 rounded shadow-md w-48">
-                            <a href="/products/category1" class="block px-4 py-2 hover:bg-gray-100">Category 1</a>
-                            <a href="/products/category2" class="block px-4 py-2 hover:bg-gray-100">Category 2</a>
-                        </div>
-                    </div>
+<!--                <div class="relative group">-->
+<!--                    <button class="flex items-center space-x-1">-->
+<!--                        <span>Product</span>-->
+<!--                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">-->
+<!--                            <path d="M5.5 7l4.5 4.5L14.5 7z" />-->
+<!--                        </svg>-->
+<!--                    </button>-->
+<!--&lt;!&ndash;                        &lt;!&ndash; Dropdown example &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="absolute hidden group-hover:block hover:text-orange-500  bg-white text-black mt-2 rounded shadow-md w-48">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a href="/products/category1" class="block px-4 py-2 hover:bg-gray-100">Category 1</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a href="/products/category2" class="block px-4 py-2 hover:bg-gray-100">Category 2</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--                    </div>-->
                     <a href="/promotions" class="hover:text-orange-500">Promotion</a>
                     <a href="/news" class="hover:text-orange-500">News</a>
-                    <a href="/contact" class="hover:text-orange-500">Contact</a>
-                <a  th:href="@{/orders/history}" class="text-sm text-gray-700 hover:text-orange-600 font-medium">
-                    <i class="fas fa-receipt mr-1"></i> Đơn hàng của tôi
+                <a  th:href="@{/orders/history}" class="text-sm  hover:text-orange-600 ">
+                     My order
                 </a>
             </nav>
 

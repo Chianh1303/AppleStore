@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin - Order List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+<h1 class="text-2xl font-bold text-gray-800 mb-6">Danh sách đơn hàng</h1>
+
+<div th:if="${successMessage}" class="bg-green-100 text-green-800 px-4 py-3 rounded mb-4">
+    <p th:text="${successMessage}">Cập nhật thành công</p>
+</div>
+<div th:if="${errorMessage}" class="bg-red-100 text-red-800 px-4 py-3 rounded mb-4">
+    <p th:text="${errorMessage}">Có lỗi xảy ra</p>
+</div>
+
+<table class="w-full bg-white rounded shadow text-sm">
+    <thead class="bg-orange-400 text-white">
+    <tr>
+        <th class="px-4 py-2 text-left">Order ID</th>
+        <th class="px-4 py-2">Customer</th>
+        <th class="px-4 py-2">Created</th>
+        <th class="px-4 py-2">Status</th>
+        <th class="px-4 py-2">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orders}" class="border-b hover:bg-gray-50">
+        <td class="px-4 py-2" th:text="${order.id}">#1</td>
+        <td class="px-4 py-2 text-center" th:text="${order.customerName}">John Doe</td>
+        <td class="px-4 py-2 text-center" th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
+        <td class="px-4 py-2 text-center">
+            <span th:text="${order.status}"></span>
+        </td>
+        <td class="px-4 py-2 text-center space-x-2">
+            <form th:action="@{/admin/orders/update-status}" method="post" class="inline">
+                <input type="hidden" name="orderId" th:value="${order.id}" />
+                <select name="status" class="text-sm border rounded px-2 py-1">
+                    <option value="PENDING" th:selected="${order.status == 'PENDING'}">Pending</option>
+                    <option value="APPROVED" th:selected="${order.status == 'APPROVED'}">Approved</option>
+                    <option value="CANCELED" th:selected="${order.status == 'CANCELED'}">Canceled</option>
+                </select>
+                <button type="submit" class="text-white bg-blue-500 hover:bg-blue-600 rounded px-3 py-1">✔</button>
+            </form>
+            <a th:href="@{/admin/orders/detail/{id}(id=${order.id})}" class="text-orange-600 hover:underline">Chi tiết</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -34,13 +34,15 @@ public class OrderService implements IOrderService<Order> {
 
     @Override
     public Order findById(Long id) {
-        return orderRepository.findById(id).orElse(null);
+        return orderRepository.findByIdWithItems(id);
     }
+
 
     @Override
     public List<Order> findByUser(User user) {
         return orderRepository.findByUser(user);
     }
+
 
 
 }

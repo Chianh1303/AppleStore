@@ -20,10 +20,22 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items = new ArrayList<>();
     private double totalAmount;
+    @Column(nullable = false)
+    private String status = "PENDING";
 
     // Getters and setters
 
     public Order() {
+    }
+
+    public Order(Long id, LocalDateTime createdAt, String customerName, User user, List<OrderItem> items, double totalAmount, String status) {
+        this.id = id;
+        this.createdAt = createdAt;
+        this.customerName = customerName;
+        this.user = user;
+        this.items = items;
+        this.totalAmount = totalAmount;
+        this.status = status;
     }
 
     public Order(Long id, LocalDateTime createdAt, String customerName, User user, List<OrderItem> items, double totalAmount) {
@@ -41,6 +53,14 @@ public class Order {
         this.customerName = customerName;
         this.user = user;
         this.items = items;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Long getId() {
