@@ -78,35 +78,38 @@
         </div>
 
         <!-- Order Summary -->
-        <div class="bg-white rounded-xl shadow-md p-6 w-full lg:w-80">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Order Summary</h2>
-            <div class="text-gray-700 text-sm space-y-2">
-                <div class="flex justify-between">
-                    <span>Selected Items:</span>
-                    <span id="totalItems">0</span>
+            <div class="bg-white rounded-xl shadow-md p-6 w-full lg:w-80">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Order Summary</h2>
+                <div class="text-gray-700 text-sm space-y-2">
+                    <div class="flex justify-between">
+                        <span>Selected Items:</span>
+                        <span id="totalItems">0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">$0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Tax (10%):</span>
+                        <span id="tax">$0</span>
+                    </div>
+                    <div id="checkoutSection" class="mt-4 space-y-4">
+                        <div class="border-t pt-2 flex justify-between font-semibold text-gray-900">
+                            <span>Total:</span>
+                            <span id="totalAmount">$0</span>
+                        </div>
+                        <form th:action="@{/orders/checkout}" method="post" id="checkoutForm">
+                            <input type="hidden" name="selectedIds" id="selectedIds" />
+                            <button type="button" onclick="submitCheckout()"
+                                    class="w-full inline-flex items-center justify-center px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg text-sm font-medium transition">
+                                <i class="fas fa-credit-card mr-2"></i> Checkout Now
+                            </button>
+                        </form>
+                    </div>
+
                 </div>
-                <div class="flex justify-between">
-                    <span>Subtotal:</span>
-                    <span id="subtotal">$0</span>
-                </div>
-                <div class="flex justify-between">
-                    <span>Tax (10%):</span>
-                    <span id="tax">$0</span>
-                </div>
-                <div class="border-t pt-2 flex justify-between font-semibold text-gray-900">
-                    <span>Total:</span>
-                    <span id="totalAmount">$0</span>
-                </div>
-            </div>
-            <form th:action="@{/orders/checkout}" method="post" id="checkoutForm" class="mt-6">
-                <input type="hidden" name="selectedIds" id="selectedIds" />
-                <button type="button" onclick="submitCheckout()"
-                        class="w-full inline-flex items-center justify-center px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg text-sm font-medium transition">
-                    <i class="fas fa-credit-card mr-2"></i> Checkout Now
-                </button>
-            </form>
-        </div>
     </div>
+        </div>
 </main>
 
 <!-- Footer -->
@@ -147,6 +150,44 @@
     <span class="text-sm font-medium">Please select at least one item to checkout.</span>
 </div>
 
+<!-- Modal xác nhận logout -->
+<div id="logoutModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 hidden">
+    <div class="bg-white p-6 rounded-xl shadow-2xl w-80 text-center animate-fade-in">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">
+            Are you sure you want to log out?
+        </h2>
+        <div class="flex justify-center gap-4">
+            <a href="/user/logout"
+               class="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600 transition duration-200">
+                Logout
+            </a>
+            <button onclick="closeLogoutModal()"
+                    class="px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-200">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function openLogoutModal(event) {
+        event.preventDefault();
+        document.getElementById('logoutModal').classList.remove('hidden');
+    }
+
+    function closeLogoutModal() {
+        document.getElementById('logoutModal').classList.add('hidden');
+    }
+
+    // Optional: đóng khi click nền đen
+    document.addEventListener('click', function (e) {
+        const modal = document.getElementById('logoutModal');
+        if (!modal.classList.contains('hidden') && e.target === modal) {
+            closeLogoutModal();
+        }
+    });
+</script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const selectAllCheckbox = document.getElementById("selectAll");
@@ -177,11 +218,24 @@
             subtotalSpan.textContent = formatPrice(subtotal);
             taxSpan.textContent = formatPrice(tax);
             totalAmountSpan.textContent = formatPrice(total);
+
+            // ✅ Ẩn/hiện dòng tổng tiền + nút checkout
+            const checkoutSection = document.getElementById("checkoutSection");
+            if (totalItems > 0) {
+                checkoutSection.classList.remove("hidden");
+            } else {
+                checkoutSection.classList.add("hidden");
+            }
         }
 
         function formatPrice(value) {
             value = Math.floor(value * 100) / 100;
             return `$${value.toFixed(2)}`;
+        }
+
+        function updateSelectAllState() {
+            const allChecked = Array.from(itemCheckboxes).every(cb => cb.checked);
+            selectAllCheckbox.checked = allChecked;
         }
 
         selectAllCheckbox.addEventListener("change", function () {
@@ -190,11 +244,16 @@
         });
 
         itemCheckboxes.forEach(cb => {
-            cb.addEventListener("change", updateTotals);
+            cb.addEventListener("change", () => {
+                updateTotals();
+                updateSelectAllState();
+            });
         });
 
         updateTotals();
+        updateSelectAllState();
     });
+
 
     function submitCheckout() {
         const selected = Array.from(document.querySelectorAll(".item-checkbox"))
@@ -211,6 +270,26 @@
         document.getElementById("selectedIds").value = selected.join(",");
         document.getElementById("checkoutForm").submit();
     }
+
+
+        function openLogoutModal(event) {
+        event.preventDefault();
+        document.getElementById('logoutModal').classList.remove('hidden');
+    }
+
+        function closeLogoutModal() {
+        document.getElementById('logoutModal').classList.add('hidden');
+    }
+
+        // Optional: đóng khi click nền đen
+        document.addEventListener('click', function (e) {
+        const modal = document.getElementById('logoutModal');
+        if (!modal.classList.contains('hidden') && e.target === modal) {
+        closeLogoutModal();
+    }
+    });
 </script>
+
 </body>
+
 </html>

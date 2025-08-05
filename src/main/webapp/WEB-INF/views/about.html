@@ -70,6 +70,43 @@
 
 <!-- Footer -->
 <div th:replace="/fragments :: footer"></div>
+<!-- Modal xác nhận logout -->
+<div id="logoutModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 hidden">
+    <div class="bg-white p-6 rounded-xl shadow-2xl w-80 text-center animate-fade-in">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">
+            Are you sure you want to log out?
+        </h2>
+        <div class="flex justify-center gap-4">
+            <a href="/user/logout"
+               class="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600 transition duration-200">
+                Logout
+            </a>
+            <button onclick="closeLogoutModal()"
+                    class="px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-200">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
 
+
+<script>
+    function openLogoutModal(event) {
+        event.preventDefault();
+        document.getElementById('logoutModal').classList.remove('hidden');
+    }
+
+    function closeLogoutModal() {
+        document.getElementById('logoutModal').classList.add('hidden');
+    }
+
+    // Optional: đóng khi click nền đen
+    document.addEventListener('click', function (e) {
+        const modal = document.getElementById('logoutModal');
+        if (!modal.classList.contains('hidden') && e.target === modal) {
+            closeLogoutModal();
+        }
+    });
+</script>
 </body>
 </html>

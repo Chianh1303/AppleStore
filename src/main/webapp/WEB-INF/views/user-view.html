@@ -277,7 +277,6 @@
     }, 3000);
 </script>
 <div th:replace="/fragments :: footer"></div>
-</body>
 <!-- Modal xác nhận logout -->
 <div id="logoutModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 hidden">
     <div class="bg-white p-6 rounded-xl shadow-2xl w-80 text-center animate-fade-in">
@@ -315,6 +314,9 @@
             closeLogoutModal();
         }
     });
+    </script>
+</body>
+<script>
 
     setTimeout(function () {
         const alertBox = document.getElementById('alertBox');

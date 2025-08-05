@@ -1,65 +1,53 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1" name="viewport"/>
-  <title>
-    Creative Summer Banner
-  </title>
-  <script src="https://cdn.tailwindcss.com">
-  </script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-    body {
-      font-family: 'Roboto', sans-serif;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <title th:replace="${title} :: title">Apple Store</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
 </head>
-<body class="bg-gradient-to-r from-white via-[#fff7f7] to-[#fff0f3]">
-<div class="max-w-7xl mx-auto relative flex items-center justify-between px-4 py-12">
-  <!-- Left content -->
-  <div class="max-w-xl">
-    <h2 class="text-[40px] font-extrabold leading-[1.1] text-[#d9641a] mb-6">
-      SÁNG TẠO ĐÓN HÈ
-      <br/>
-      TĂNG TỐC SÁNG TẠO
-    </h2>
-    <div class="relative inline-flex items-center bg-gradient-to-r from-[#f9b233] to-[#d9641a] rounded-[30px] px-8 py-3 text-white text-[24px] font-normal leading-none mb-6">
-      <img alt="Pink and white beach umbrella with pink striped beach chair" class="absolute left-[-50px] top-1/2 -translate-y-1/2 w-[48px] h-[48px]" height="48" src="https://storage.googleapis.com/a1aa/image/ac9f7429-dabd-4c63-1324-f741cc59e8e7.jpg" width="48"/>
-      Trả góp 0% chỉ từ 19K/ ngày
-      <div class="w-6 h-6 bg-[#fff0f3] rounded-tr-full rounded-br-full absolute right-[-24px]">
-      </div>
-    </div>
-    <p class="text-black text-[18px] font-normal mb-1">
-      Ưu đãi thanh toán tới
-      <span class="text-[#d9641a] font-bold">
-      500K
-     </span>
-    </p>
-    <p class="text-black text-[18px] font-normal mb-1">
-      Thu cũ tặng Tai nghe Sony WH-ULT900N
-      <span class="text-[#d9641a] font-bold">
-      4.490K
-     </span>
-    </p>
-    <p class="text-black text-[14px] font-normal">
-      Từ 01.06 - 30.06.2025
-    </p>
-  </div>
-  <!-- Right image -->
-  <div class="flex-shrink-0 ml-8">
-    <img alt="Stack of four smartphones with colorful screens in black, blue, pink, and black colors" class="w-[400px] h-[280px] object-contain" height="280" src="https://storage.googleapis.com/a1aa/image/f45b759a-ecca-4938-86f8-2bb2031734b1.jpg" width="400"/>
-  </div>
-  <!-- Left arrow -->
-  <button aria-label="Previous" class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white bg-opacity-20 backdrop-blur-sm flex items-center justify-center text-white text-xl">
-    <i class="fas fa-chevron-left">
-    </i>
-  </button>
-  <!-- Right arrow -->
-  <button aria-label="Next" class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white bg-opacity-20 backdrop-blur-sm flex items-center justify-center text-white text-xl">
-    <i class="fas fa-chevron-right">
-    </i>
-  </button>
-</div>
+<body class="pt-32 bg-gray-100 font-sans min-h-screen flex flex-col">
+
+<!-- 🧩 HEADER -->
+<div th:replace="fragments :: header"></div>
+
+<!-- 📦 MAIN CONTENT -->
+<main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8" th:replace="${content}"></main>
+
+<!-- 🔚 FOOTER -->
+<div th:replace="fragments :: footer"></div>
+
+<!-- 🚪 LOGOUT MODAL -->
+<div th:replace="fragments :: logoutModal"></div>
+
+<!-- 🧠 SCRIPT CHUNG -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const logoutBtn = document.getElementById("logoutButton");
+    const modal = document.getElementById("logoutModal");
+
+    if (logoutBtn && modal) {
+      logoutBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        modal.classList.remove("hidden");
+      });
+    }
+
+    // Cancel button
+    const cancelBtn = modal?.querySelector(".cancel-btn");
+    cancelBtn?.addEventListener("click", function () {
+      modal.classList.add("hidden");
+    });
+
+    // Click outside modal
+    modal?.addEventListener("click", function (e) {
+      if (e.target === modal) {
+        modal.classList.add("hidden");
+      }
+    });
+  });
+</script>
+
 </body>
 </html>

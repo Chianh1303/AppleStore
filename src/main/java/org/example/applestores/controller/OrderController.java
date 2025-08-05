@@ -112,8 +112,6 @@ public class OrderController {
             // Cập nhật lại vào session
             session.setAttribute("cart", carts);
         }
-
-
         redirectAttributes.addFlashAttribute("successMessage", "Order successful!");
         return "redirect:/user/home";
     }
