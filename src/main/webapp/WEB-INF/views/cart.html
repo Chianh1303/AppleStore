@@ -98,11 +98,11 @@
                             <span>Total:</span>
                             <span id="totalAmount">$0</span>
                         </div>
-                        <form th:action="@{/orders/checkout}" method="post" id="checkoutForm">
+                        <form th:action="@{/orders/checkout-info}" method="get" id="checkoutForm">
                             <input type="hidden" name="selectedIds" id="selectedIds" />
                             <button type="button" onclick="submitCheckout()"
                                     class="w-full inline-flex items-center justify-center px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg text-sm font-medium transition">
-                                <i class="fas fa-credit-card mr-2"></i> Checkout Now
+                                <i class="fas fa-credit-card mr-2"></i> Buy now
                             </button>
                         </form>
                     </div>
