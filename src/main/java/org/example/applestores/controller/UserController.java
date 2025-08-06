@@ -39,14 +39,14 @@ public class UserController {
         Collections.shuffle(featuredProducts);
         featuredProducts = featuredProducts.stream()
                 .filter(p -> p.getStock() != null && p.getStock() > 0)
-                .limit(10)
+                .limit(8)
                 .collect(Collectors.toList());
 
         // Lọc sản phẩm giảm giá (giá thấp nhất + còn hàng)
         List<Product> discountedProducts = products.stream()
                 .filter(p -> p.getStock() != null && p.getStock() > 0)
                 .sorted(Comparator.comparingDouble(Product::getPrice))
-                .limit(10)
+                .limit(8)
                 .collect(Collectors.toList());
         model.addAttribute("featuredProducts", featuredProducts);
         model.addAttribute("discountedProducts", discountedProducts);

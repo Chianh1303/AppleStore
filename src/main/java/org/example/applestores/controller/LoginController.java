@@ -18,28 +18,28 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("")
-    public String loginForm(Model model) {
-        model.addAttribute("user", new User());
-        return "/login";
-    }
-
-    @PostMapping("/signin")
-    public String login(@ModelAttribute("user") User user, HttpSession session, Model model) {
-        User found = userService.login(user.getUsername(), user.getPassword());
-        if (found != null) {
-            session.setAttribute("loggedInUser", found);
-            if ("ADMIN".equalsIgnoreCase(found.getRole())) {
-                return "redirect:/admin/homeAdmin";
-
-            } else {
-                return "redirect:/user/home";
-            }
-        } else {
-            model.addAttribute("error", "Invalid username or password");
+        @GetMapping("")
+        public String loginForm(Model model) {
+            model.addAttribute("user", new User());
             return "/login";
         }
-    }
+
+        @PostMapping("/signin")
+        public String login(@ModelAttribute("user") User user, HttpSession session, Model model) {
+            User found = userService.login(user.getUsername(), user.getPassword());
+            if (found != null) {
+                session.setAttribute("loggedInUser", found);
+                if ("ADMIN".equalsIgnoreCase(found.getRole())) {
+                    return "redirect:/admin/homeAdmin";
+
+                } else {
+                    return "redirect:/user/home";
+                }
+            } else {
+                model.addAttribute("error", "Invalid username or password");
+                return "/login";
+            }
+        }
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {

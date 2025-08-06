@@ -33,6 +33,7 @@
                     <th class="px-4 py-2 text-right">Unit Price</th>
                     <th class="px-4 py-2 text-center">Quantity</th>
                     <th class="px-4 py-2 text-right">Total</th>
+                    <th class="px-4 py-2 text-center">Status</th>
                 </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100" th:if="${order.items != null}">
@@ -41,6 +42,7 @@
                     <td class="px-4 py-3 text-right" th:text="${item.product.price} + ' $'">900 $</td>
                     <td class="px-4 py-3 text-center" th:text="${item.quantity}">1</td>
                     <td class="px-4 py-3 text-right text-orange-600 font-semibold" th:text="${item.price} + ' $'">900 $</td>
+                    <td class="px-4 py-3 text-center" th:text="${order.status}">Pending</td> <!-- ✅ Thêm dữ liệu trạng thái -->
                 </tr>
                 </tbody>
             </table>

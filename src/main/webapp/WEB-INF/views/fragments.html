@@ -49,15 +49,22 @@
                               th:text="${cartItemCount}">0</span>
                     </a>
 
-                    <!-- Logout -->
-                    <a href="#" onclick="openLogoutModal(event)" class="hover:text-orange-500 hidden md:inline-flex">
-                        <i class="fas fa-sign-out-alt text-xl"></i>
+                    <!-- Hiện Login nếu chưa đăng nhập -->
+                    <a th:if="${loggedInUser == null}" th:href="@{/login}" class="text-white hover:text-orange-500">
+                        <i class="fas fa-user mr-1"></i>
                     </a>
+
+                    <!-- Hiện Logout nếu đã đăng nhập -->
+                    <a th:if="${loggedInUser != null}" href="#" onclick="openLogoutModal(event)" class="text-white hover:text-orange-500">
+                        <i class="fas fa-sign-out-alt mr-1"></i>
+                    </a>
+
                 </div>
             </div>
         </div>
     </header>
 </div>
+
 
 
 

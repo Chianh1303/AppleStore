@@ -25,5 +25,11 @@ public class GlobalControllerAdvice {
 
         return cartItems.stream().mapToInt(CartItem::getQuantity).sum();
     }
+
+    @ModelAttribute
+    public void addLoggedInUserToModel(HttpSession session, Model model) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        model.addAttribute("loggedInUser", loggedInUser);
+    }
 }
 

@@ -106,7 +106,7 @@ public class OrderController {
         carts.removeIf(item -> ids.contains(item.getProduct().getId()) && item.getUser().getId().equals(user.getId()));
         session.setAttribute("cart", carts);
 
-        redirectAttributes.addFlashAttribute("successMessage", "Thanh toán thành công!");
+        redirectAttributes.addFlashAttribute("successMessage", "Payment successful!");
         return "redirect:/user/home";
     }
 
