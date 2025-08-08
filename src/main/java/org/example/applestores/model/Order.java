@@ -15,17 +15,61 @@ public class Order {
     private LocalDateTime createdAt;
 
     private String customerName;
+
     @ManyToOne
     private User user;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items = new ArrayList<>();
+
     private double totalAmount;
+
     @Column(nullable = false)
     private String status = "PENDING";
+
+    @Column(nullable = false)
+    private String address;
+
+    @Column(nullable = false)
+    private String phone;
+
+    // Ghi chú đơn hàng (không bắt buộc)
+    @Column(columnDefinition = "TEXT")
+    private String note;
+
+    // Phương thức thanh toán: COD, BANK, etc.
+    @Column(nullable = false)
+    private String paymentMethod;
 
     // Getters and setters
 
     public Order() {
+    }
+
+    public Order(Long id, LocalDateTime createdAt, String customerName, User user, List<OrderItem> items, double totalAmount, String status, String address, String phone, String note, String paymentMethod) {
+        this.id = id;
+        this.createdAt = createdAt;
+        this.customerName = customerName;
+        this.user = user;
+        this.items = items;
+        this.totalAmount = totalAmount;
+        this.status = status;
+        this.address = address;
+        this.phone = phone;
+        this.note = note;
+        this.paymentMethod = paymentMethod;
+    }
+
+    public Order(Long id, LocalDateTime createdAt, String customerName, User user, List<OrderItem> items, double totalAmount, String status, String address, String phone) {
+        this.id = id;
+        this.createdAt = createdAt;
+        this.customerName = customerName;
+        this.user = user;
+        this.items = items;
+        this.totalAmount = totalAmount;
+        this.status = status;
+        this.address = address;
+        this.phone = phone;
     }
 
     public Order(Long id, LocalDateTime createdAt, String customerName, User user, List<OrderItem> items, double totalAmount, String status) {
@@ -53,6 +97,38 @@ public class Order {
         this.customerName = customerName;
         this.user = user;
         this.items = items;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getStatus() {

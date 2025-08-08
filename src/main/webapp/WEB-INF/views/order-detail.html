@@ -12,20 +12,6 @@
 <div th:replace="/fragments :: header"></div>
 
 <main class="max-w-5xl mx-auto px-6 py-12">
-    <!-- Title and action buttons -->
-    <div class="flex items-center justify-between mb-8">
-        <h1 class="text-4xl font-bold text-black">Order Details</h1>
-        <div class="flex gap-2">
-            <button onclick="window.print()"
-                    class="px-4 py-2 border border-orange-500 text-orange-600 rounded hover:bg-orange-50 transition text-sm">
-                <i class="fas fa-print mr-1"></i> Print
-            </button>
-            <a th:href="@{/orders/download/{id}(id=${order.id})}"
-               class="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition text-sm">
-                <i class="fas fa-file-download mr-1"></i> Download PDF
-            </a>
-        </div>
-    </div>
 
     <!-- Order Info -->
     <div class="bg-white border border-gray-200 rounded-xl shadow-md p-6 space-y-6">
@@ -33,6 +19,9 @@
             <div><strong>Order ID:</strong> <span th:text="${order.id}">#123</span></div>
             <div><strong>Order Date:</strong> <span th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}">...</span></div>
             <div><strong>Customer:</strong> <span th:text="${order.customerName}">...</span></div>
+            <div><strong>Phone:</strong> <span th:text="${order.phone}">0123456789</span></div>
+            <div><strong>Address:</strong> <span th:text="${order.address}">123 Nguyễn Văn Cừ</span></div>
+            <div><strong>Note:</strong> <span th:text="${order.note}">Giao buổi sáng</span></div>
         </div>
 
         <!-- Product Table -->
@@ -44,6 +33,7 @@
                     <th class="px-4 py-2 text-right">Unit Price</th>
                     <th class="px-4 py-2 text-center">Quantity</th>
                     <th class="px-4 py-2 text-right">Total</th>
+                    <th class="px-4 py-2 text-center">Status</th>
                 </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100" th:if="${order.items != null}">
@@ -52,32 +42,30 @@
                     <td class="px-4 py-3 text-right" th:text="${item.product.price} + ' $'">900 $</td>
                     <td class="px-4 py-3 text-center" th:text="${item.quantity}">1</td>
                     <td class="px-4 py-3 text-right text-orange-600 font-semibold" th:text="${item.price} + ' $'">900 $</td>
+                    <td class="px-4 py-3 text-center" th:text="${order.status}">Pending</td> <!-- ✅ Thêm dữ liệu trạng thái -->
                 </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Total amount and action buttons -->
+        <!-- Total + Back -->
         <div class="flex flex-col sm:flex-row justify-between items-center sm:items-end gap-4 mt-6">
-            <!-- Back Button -->
             <a th:href="@{/orders/history}"
                class="inline-flex items-center px-5 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition text-sm text-gray-700">
                 <i class="fas fa-arrow-left mr-2"></i> Back
             </a>
 
-            <!-- Total + Pay Now -->
             <div class="flex flex-col sm:items-end text-right">
                 <div class="text-lg font-semibold mb-2">
                     Total: <span class="ml-2 text-orange-600" th:text="${order.getTotalAmount()} + ' $'">900 $</span>
                 </div>
-                <a th:href="@{/orders/checkout/{id}(id=${order.id})}"
-                   class="inline-flex items-center px-5 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition text-sm">
-                    <i class="fas fa-credit-card mr-2"></i> Pay now
-                </a>
+
             </div>
         </div>
     </div>
-</main>
 
+
+</main>
+<div th:replace="/fragments :: footer"></div>
 </body>
 </html>

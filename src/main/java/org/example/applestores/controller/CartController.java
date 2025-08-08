@@ -39,30 +39,35 @@ public class CartController {
 
     @GetMapping("/cartView")
     public String viewCart(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        User user = (User) session.getAttribute("loggedInUser");
+        if (user == null) {
+            redirectAttributes.addFlashAttribute("error", "Please log in to view shopping cart.");
+            return "redirect:/login";
+        }
+
         List<CartItem> cartItems = cartItemService.findCartByUser(session, model);
 
-        if (cartItems == null || cartItems.isEmpty()) {
-            redirectAttributes.addFlashAttribute("successMessage", "Cart is empty!");
-            return "redirect:/user/home";
+        // Cập nhật lại giá sản phẩm từ DB nếu có cart item
+        if (cartItems != null) {
+            for (CartItem item : cartItems) {
+                Long productId = item.getProduct().getId();
+                productRepository.findById(productId).ifPresent(item::setProduct);
+            }
         }
 
-        // Cập nhật lại giá sản phẩm từ DB
-        for (CartItem item : cartItems) {
-            Long productId = item.getProduct().getId();
-            productRepository.findById(productId).ifPresent(item::setProduct);
-        }
+        long totalAmount = (cartItems != null)
+                ? cartItems.stream().mapToLong(item -> (long) (item.getQuantity() * item.getProduct().getPrice())).sum()
+                : 0;
 
-        // Tính tổng tiền
-        long totalAmount = cartItems.stream()
-                .mapToLong(item -> (long) (item.getQuantity() * item.getProduct().getPrice()))
-                .sum();
+        int cartItemCount = (cartItems != null)
+                ? cartItems.stream().mapToInt(CartItem::getQuantity).sum()
+                : 0;
 
-        int cartItemCount = cartItems.stream().mapToInt(CartItem::getQuantity).sum();
-        model.addAttribute("cartItemCount", cartItemCount);
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("totalAmount", totalAmount);
+        model.addAttribute("cartItemCount", cartItemCount);
 
-        return "/cart"; // thymeleaf template
+        return "/cart";
     }
 
 

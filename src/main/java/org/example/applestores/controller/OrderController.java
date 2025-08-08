@@ -49,41 +49,39 @@ public class OrderController {
         model.addAttribute("orders", orders);
         return "/orders_list";
     }
-    @PostMapping("/checkout")
-    public String checkout(@RequestParam("selectedIds") String selectedIds,
-                           @SessionAttribute("loggedInUser") User user,
-                           RedirectAttributes redirectAttributes, HttpSession session) {
+    @GetMapping("/checkout-info")
+    public String showCheckoutForm(@RequestParam("selectedIds") String selectedIds, Model model) {
+        model.addAttribute("selectedIds", selectedIds);
+        model.addAttribute("order", new Order());
+        return "/checkout-info"; // Tên file HTML bạn sẽ tạo
+    }
 
-        // B1: Tách chuỗi selectedIds thành List<String>
-        String[] idStrings = selectedIds.split(",");
-        List<String> validIdStrings = Arrays.stream(idStrings)
+    @PostMapping("/checkout")
+    public String checkout(@ModelAttribute Order order,
+                           @RequestParam("selectedIds") String selectedIds,
+                           @SessionAttribute("loggedInUser") User user,
+                           HttpSession session,
+                           RedirectAttributes redirectAttributes) {
+
+        // Xử lý danh sách sản phẩm được chọn
+        List<Long> ids = Arrays.stream(selectedIds.split(","))
                 .filter(s -> !s.isEmpty())
-                .collect(Collectors.toList());
-        List<Long> ids = validIdStrings.stream()
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
-        List<CartItem> allCartItems = new ArrayList<>();
 
         List<CartItem> carts = (List<CartItem>) session.getAttribute("cart");
-        for(CartItem item : carts) {
-            if(Objects.equals(item.getUser().getId(), user.getId())) {
-                allCartItems.add(item);
-            }
-        }
 
-        Set<Long> selectedIdSet = new HashSet<>(ids);
-        List<CartItem> selectedItems = allCartItems.stream()
-                .filter(item -> selectedIdSet.contains(item.getProduct().getId()))
+        List<CartItem> selectedItems = carts.stream()
+                .filter(item -> ids.contains(item.getProduct().getId())
+                        && item.getUser().getId().equals(user.getId()))
                 .collect(Collectors.toList());
 
-        if (selectedItems == null || selectedItems.isEmpty()) {
-            System.out.println("Không có sản phẩm được chọn.");
-            redirectAttributes.addFlashAttribute("successMessage", "Vui lòng chọn sản phẩm để thanh toán.");
+        if (selectedItems.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Không có sản phẩm được chọn.");
             return "redirect:/user/home";
         }
 
-
-        Order order = new Order();
+        // Tạo đơn hàng
         order.setUser(user);
         order.setCustomerName(user.getUsername());
         order.setCreatedAt(LocalDateTime.now());
@@ -99,24 +97,19 @@ public class OrderController {
         }
 
         order.setItems(orderItems);
+        double total = orderItems.stream().mapToDouble(OrderItem::getPrice).sum();
+        order.setTotalAmount(total);
 
-        double totalAmount = orderItems.stream()
-                .mapToDouble(OrderItem::getPrice)
-                .sum();
-        order.setTotalAmount(totalAmount);
         orderService.save(order);
-        if (carts != null) {
-            // Xóa những sản phẩm đã thanh toán khỏi session
-            carts.removeIf(item -> selectedIdSet.contains(item.getProduct().getId())
-                    && Objects.equals(item.getUser().getId(), user.getId()));
-            // Cập nhật lại vào session
-            session.setAttribute("cart", carts);
-        }
 
+        // Xoá sản phẩm đã đặt khỏi session cart
+        carts.removeIf(item -> ids.contains(item.getProduct().getId()) && item.getUser().getId().equals(user.getId()));
+        session.setAttribute("cart", carts);
 
-        redirectAttributes.addFlashAttribute("successMessage", "Order successful!");
+        redirectAttributes.addFlashAttribute("successMessage", "Payment successful!");
         return "redirect:/user/home";
     }
+
     @GetMapping("/history")
     public String showOrderHistory(HttpSession session, Model model) {
         User user = (User) session.getAttribute("loggedInUser");

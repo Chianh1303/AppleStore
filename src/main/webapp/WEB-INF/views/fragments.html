@@ -3,81 +3,70 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Fragments</title>
-</head>
+
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
 <script src="https://kit.fontawesome.com/your-real-kit-id.js" crossorigin="anonymous"></script>
-
+</head>
 
 <body class="pt-32 container mx-auto px-4 sm:px-6 lg:px-8 py-8">
 <!-- Header Fragment -->
 <div th:fragment="header">
     <header class="bg-[#1a1a1a] text-white shadow-md fixed top-0 left-0 w-full z-50">
-    <div class="container mx-auto flex items-center justify-between px-6 py-4">
-            <!-- Logo -->
-            <a href="/user/home" class="text-2xl font-bold select-none">
-                 Apple Store
-            </a>
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <a href="/user/home" class="text-2xl font-bold select-none whitespace-nowrap">
+                     Apple Store
+                </a>
 
-            <!-- Navigation -->
-            <nav class="hidden md:flex space-x-6  font-semibold text-white">
-                <a href="/user/home" class="hover:text-orange-500">Home page</a>
-                <a th:href="@{/user/introduce}" class="hover:text-orange-500">Introduce</a>
-<!--                <div class="relative group">-->
-<!--                    <button class="flex items-center space-x-1">-->
-<!--                        <span>Product</span>-->
-<!--                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">-->
-<!--                            <path d="M5.5 7l4.5 4.5L14.5 7z" />-->
-<!--                        </svg>-->
-<!--                    </button>-->
-<!--&lt;!&ndash;                        &lt;!&ndash; Dropdown example &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;                        <div class="absolute hidden group-hover:block hover:text-orange-500  bg-white text-black mt-2 rounded shadow-md w-48">&ndash;&gt;-->
-<!--&lt;!&ndash;                            <a href="/products/category1" class="block px-4 py-2 hover:bg-gray-100">Category 1</a>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <a href="/products/category2" class="block px-4 py-2 hover:bg-gray-100">Category 2</a>&ndash;&gt;-->
-<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
-<!--                    </div>-->
+                <!-- Navigation -->
+                <nav class="hidden md:flex space-x-6 font-semibold text-white ml-10">
+                    <a href="/user/home" class="hover:text-orange-500">Home page</a>
+                    <a th:href="@{/user/introduce}" class="hover:text-orange-500">Introduce</a>
                     <a href="/promotions" class="hover:text-orange-500">Promotion</a>
                     <a href="/news" class="hover:text-orange-500">News</a>
-                <a  th:href="@{/orders/history}" class="text-sm  hover:text-orange-600 ">
-                     My order
-                </a>
-            </nav>
+                    <a th:href="@{/orders/history}" class="hover:text-orange-600 text-sm">My order</a>
+                </nav>
 
-            <!-- Icons -->
-            <div class="flex items-center space-x-4">
-                <!-- Search bar -->
-                <form action="/user/search" method="get" class="hidden md:flex w-64 bg-white rounded overflow-hidden text-black">
-                    <input type="text" name="keyword" placeholder="Product search..." class="px-3 py-2 w-full focus:outline-none" />
-                    <button type="submit" class="px-3 bg-orange-600 text-white hover:bg-white-700">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
+                <!-- Right section: Search + Icons -->
+                <div class="flex items-center space-x-4">
+                    <!-- Search bar -->
+                    <form action="/user/search" method="get"
+                          class="hidden md:flex w-64 bg-white rounded overflow-hidden text-black">
+                        <input type="text" name="keyword" placeholder="Product search..."
+                               class="px-3 py-2 w-full focus:outline-none"/>
+                        <button type="submit" class="px-3 bg-orange-600 text-white hover:bg-orange-700">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
 
-<!--                &lt;!&ndash; Account &ndash;&gt;-->
-<!--                <a href="/user/profile" class="hover:text-orange-500">-->
-<!--                    <i class="fas fa-user text-xl"></i>-->
-<!--                </a>-->
+                    <!-- Cart -->
+                    <a href="/cartController/cartView" class="relative group">
+                        <i class="fas fa-shopping-cart text-xl transition duration-200 ease-in-out group-hover:text-orange-500"></i>
+                        <span class="absolute -top-2 -right-2 bg-orange-500 text-white text-xs rounded-full px-1 z-10 pointer-events-none"
+                              th:text="${cartItemCount}">0</span>
+                    </a>
 
-                <!-- Cart -->
-                <a href="/cartController/cartView" class="relative group">
-                    <i class="fas fa-shopping-cart text-xl transition duration-200 ease-in-out group-hover:text-orange-500"></i>
-                    <span class="absolute -top-2 -right-2 bg-orange-500 text-white text-xs rounded-full px-1 z-10 pointer-events-none"
-                          th:text="${cartItemCount}">0</span>
-                </a>
+                    <!-- Hiện Login nếu chưa đăng nhập -->
+                    <a th:if="${loggedInUser == null}" th:href="@{/login}" class="text-white hover:text-orange-500">
+                        <i class="fas fa-user mr-1"></i>
+                    </a>
 
+                    <!-- Hiện Logout nếu đã đăng nhập -->
+                    <a th:if="${loggedInUser != null}" href="#" onclick="openLogoutModal(event)" class="text-white hover:text-orange-500">
+                        <i class="fas fa-sign-out-alt mr-1"></i>
+                    </a>
 
-
-                <a href="#" onclick="openLogoutModal(event)" class="hover:text-orange-500 hidden md:inline-flex">
-                    <i class="fas fa-sign-out-alt text-xl"></i>
-                </a>
-
-
+                </div>
             </div>
         </div>
     </header>
-
 </div>
+
+
+
 
 
 
@@ -176,25 +165,42 @@
 </aside>
 
 
-</body>
+
 <!-- Modal xác nhận logout -->
-<div id="logoutModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 hidden">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-80 text-center">
-        <h2 class="text-lg font-semibold mb-4">Bạn có chắc chắn muốn đăng xuất?</h2>
+<div id="logoutModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 hidden">
+    <div class="bg-white p-6 rounded-xl shadow-2xl w-80 text-center animate-fade-in">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">
+            Are you sure you want to log out?
+        </h2>
         <div class="flex justify-center gap-4">
-            <a href="/user/logout" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Đăng xuất</a>
-            <button onclick="closeLogoutModal()" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Hủy</button>
+            <a href="/user/logout"
+               class="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600 transition duration-200">
+                Logout
+            </a>
+            <button onclick="closeLogoutModal()"
+                    class="px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-200">
+                Cancel
+            </button>
         </div>
     </div>
 </div>
 <script>
     function openLogoutModal(event) {
-        event.preventDefault(); // chặn href mặc định
+        event.preventDefault();
         document.getElementById('logoutModal').classList.remove('hidden');
     }
 
     function closeLogoutModal() {
         document.getElementById('logoutModal').classList.add('hidden');
     }
+
+    // Optional: đóng khi click nền đen
+    document.addEventListener('click', function (e) {
+        const modal = document.getElementById('logoutModal');
+        if (!modal.classList.contains('hidden') && e.target === modal) {
+            closeLogoutModal();
+        }
+    });
 </script>
+</body>
 </html>

@@ -163,107 +163,105 @@
                 </article>
             </div>
         </div>
-        <div th:unless="${isSearching}">
-            <div>
-                <h2 class="text-4xl font-bold text-center text-gray-800 mb-10 tracking-wide mt-10">
-                    Outstanding product
-                </h2>
+    <!-- FEATURED PRODUCTS -->
+    <div th:unless="${isSearching}">
+        <div>
+            <h2 class="text-4xl font-bold text-center text-gray-800 mb-10 tracking-wide mt-10">
+                Outstanding product
+            </h2>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                    <div th:if="${#lists.isEmpty(featuredProducts)}"
-                         class="col-span-full text-center text-gray-600 text-lg">
-                        There are no featured products
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <div th:if="${#lists.isEmpty(featuredProducts)}"
+                     class="col-span-full text-center text-gray-600 text-lg">
+                    There are no featured products
+                </div>
+
+                <!-- Hiển thị sản phẩm -->
+                <article th:each="p : ${featuredProducts}"
+                         class="bg-white rounded-2xl shadow hover:shadow-xl transition duration-300 flex flex-col relative group">
+
+                    <div class="absolute top-2 left-2 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded z-10">
+                        Outstanding
                     </div>
 
-                    <!-- Đặt vào trong div.grid -->
-                    <article th:each="p : ${featuredProducts}"
-                             class="bg-white rounded-2xl shadow hover:shadow-xl transition duration-300 flex flex-col relative group">
+                    <a th:href="@{/user/detail/{id}(id=${p.id})}"
+                       class="block overflow-hidden rounded-t-2xl bg-gray-50">
+                        <img th:src="${p.imageUrl}" alt="[[${p.name}]]"
+                             class="w-full h-56 object-contain p-5 transition-transform duration-300 group-hover:scale-105"
+                             loading="lazy"/>
+                    </a>
 
-                        <div class="absolute top-2 left-2 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded z-10">
-                            Outstanding
+                    <div class="p-5 flex flex-col flex-grow">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-1" th:text="${p.name}">Name of product</h3>
+                        <p class="text-gray-600 text-sm flex-grow mb-2 leading-relaxed" th:text="${p.description}">Describe</p>
+
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-xl font-bold text-green-600" th:text="'$' + ${p.price}">$100</span>
                         </div>
 
-                        <a th:href="@{/user/detail/{id}(id=${p.id})}"
-                           class="block overflow-hidden rounded-t-2xl bg-gray-50">
-                            <img th:src="${p.imageUrl}" alt="[[${p.name}]]"
-                                 class="w-full h-56 object-contain p-5 transition-transform duration-300 group-hover:scale-105"
-                                 loading="lazy"/>
-                        </a>
-
-                        <div class="p-5 flex flex-col flex-grow">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-1" th:text="${p.name}">Name of
-                                product</h3>
-
-                            <p class="text-gray-600 text-sm flex-grow mb-2 leading-relaxed" th:text="${p.description}">
-                                Describe</p>
-
-                            <!-- Tồn kho -->
-<!--                            <p class="text-xs text-gray-500 mb-1">Quantity: <span th:text="${p.stock}">0</span></p>-->
-
-                            <!-- Giá -->
-                            <div class="flex items-center gap-2 mb-3">
-                                <span class="text-xl font-bold text-green-600" th:text="'$' + ${p.price}">$100</span>
-                            </div>
-
-                            <!-- Đánh giá -->
-                            <div class="flex text-yellow-400 text-sm mb-4">
-                                <i class="fas fa-star" th:each="i : ${#numbers.sequence(1,5)}"></i>
-                            </div>
+                        <div class="flex text-yellow-400 text-sm mb-4">
+                            <i class="fas fa-star" th:each="i : ${#numbers.sequence(1,5)}"></i>
                         </div>
-                    </article>
-                </div>
-            </div>
-        </div>
-
-
-        <div th:unless="${isSearching}">
-            <div class="mt-20">
-                <h2 class="text-4xl font-bold text-center text-gray-800 mb-10 tracking-wide mt-10">
-                    Good price offers
-                </h2>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                    <div th:if="${#lists.isEmpty(discountedProducts)}"
-                         class="col-span-full text-center text-gray-600 text-lg">
-                        There are no discounted products.
                     </div>
-                    <article th:each="p : ${discountedProducts}"
-                             class="bg-white rounded-2xl shadow hover:shadow-xl transition duration-300 flex flex-col relative group">
+                </article>
 
-                        <div class="absolute top-2 left-2 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded z-10">
-                            Good price
-                        </div>
-
-                        <a th:href="@{/user/detail/{id}(id=${p.id})}"
-                           class="block overflow-hidden rounded-t-2xl bg-gray-50">
-                            <img th:src="${p.imageUrl}" alt="[[${p.name}]]"
-                                 class="w-full h-56 object-contain p-5 transition-transform duration-300 group-hover:scale-105"
-                                 loading="lazy"/>
-                        </a>
-
-                        <div class="p-5 flex flex-col flex-grow">
-
-                            <h3 class="text-lg font-semibold text-gray-900 mb-1" th:text="${p.name}">Name of
-                                product</h3>
-
-                            <p class="text-gray-600 text-sm flex-grow mb-2 leading-relaxed" th:text="${p.description}">
-                                Describe</p>
-
-
-                            <!-- Giá -->
-                            <div class="flex items-center gap-2 mb-3">
-                                <span class="text-xl font-bold text-green-600" th:text="'$' + ${p.price}">$100</span>
-                            </div>
-
-                            <!-- Đánh giá -->
-                            <div class="flex text-yellow-400 text-sm mb-4">
-                                <i class="fas fa-star" th:each="i : ${#numbers.sequence(1,5)}"></i>
-                            </div>
-                        </div>
-                    </article>
-                </div>
+                <!-- Chèn ô trống nếu thiếu để đủ hàng -->
+                <div th:if="${featuredProducts.size() % 4 != 0}"
+                     th:each="i : ${#numbers.sequence(1, 4 - (featuredProducts.size() % 4))}"
+                     class="hidden sm:block md:block lg:block bg-transparent rounded-2xl"></div>
             </div>
         </div>
+    </div>
+
+    <!-- DISCOUNTED PRODUCTS -->
+    <div th:unless="${isSearching}">
+        <div class="mt-20">
+            <h2 class="text-4xl font-bold text-center text-gray-800 mb-10 tracking-wide mt-10">
+                Good price offers
+            </h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <div th:if="${#lists.isEmpty(discountedProducts)}"
+                     class="col-span-full text-center text-gray-600 text-lg">
+                    There are no discounted products.
+                </div>
+
+                <article th:each="p : ${discountedProducts}"
+                         class="bg-white rounded-2xl shadow hover:shadow-xl transition duration-300 flex flex-col relative group">
+
+                    <div class="absolute top-2 left-2 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded z-10">
+                        Good price
+                    </div>
+
+                    <a th:href="@{/user/detail/{id}(id=${p.id})}"
+                       class="block overflow-hidden rounded-t-2xl bg-gray-50">
+                        <img th:src="${p.imageUrl}" alt="[[${p.name}]]"
+                             class="w-full h-56 object-contain p-5 transition-transform duration-300 group-hover:scale-105"
+                             loading="lazy"/>
+                    </a>
+
+                    <div class="p-5 flex flex-col flex-grow">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-1" th:text="${p.name}">Name of product</h3>
+                        <p class="text-gray-600 text-sm flex-grow mb-2 leading-relaxed" th:text="${p.description}">Describe</p>
+
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-xl font-bold text-green-600" th:text="'$' + ${p.price}">$100</span>
+                        </div>
+
+                        <div class="flex text-yellow-400 text-sm mb-4">
+                            <i class="fas fa-star" th:each="i : ${#numbers.sequence(1,5)}"></i>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Chèn ô trống nếu thiếu để đủ hàng -->
+                <div th:if="${discountedProducts.size() % 4 != 0}"
+                     th:each="i : ${#numbers.sequence(1, 4 - (discountedProducts.size() % 4))}"
+                     class="hidden sm:block md:block lg:block bg-transparent rounded-2xl"></div>
+            </div>
+        </div>
+    </div>
+
 </main>
 <!-- Script tự động ẩn sau 3 giây -->
 <script>
@@ -277,7 +275,6 @@
     }, 3000);
 </script>
 <div th:replace="/fragments :: footer"></div>
-</body>
 <!-- Modal xác nhận logout -->
 <div id="logoutModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 hidden">
     <div class="bg-white p-6 rounded-xl shadow-2xl w-80 text-center animate-fade-in">
@@ -315,6 +312,9 @@
             closeLogoutModal();
         }
     });
+    </script>
+</body>
+<script>
 
     setTimeout(function () {
         const alertBox = document.getElementById('alertBox');
